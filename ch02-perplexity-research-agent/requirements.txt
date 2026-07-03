@@ -1,0 +1,12 @@
+# ch02-perplexity-research-agent requirements
+#
+# Install with:  pip install -r requirements.txt
+
+# --- Runtime ---
+requests>=2.31,<3.0     # HTTP calls to the Perplexity Sonar API
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run offline (no API key needed)
+
+# --- Optional ---
+# openai>=1.0           # alternative client (Sonar is OpenAI-API compatible)

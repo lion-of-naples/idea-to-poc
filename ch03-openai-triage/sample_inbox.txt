@@ -1,0 +1,7 @@
+Card reader at register 3 has been dead since this morning, customers can only pay cash
+I was charged twice for my June subscription, please refund the duplicate $29
+Would love a dark mode option in the mobile app someday
+The CSV export button throws a 500 error when there are more than 10k rows
+How do I change the email address on my account?
+Our production database is at 98% disk and alerts are firing every 5 minutes
+Typo on the pricing page: "montly" should be "monthly"

@@ -1,0 +1,9 @@
+# ch03-openai-triage requirements
+#
+# Install with:  pip install -r requirements.txt
+
+# --- Runtime ---
+openai>=1.40,<2.0       # OpenAI Python SDK (Responses API + structured outputs)
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run offline (no API key, no network)

@@ -2,6 +2,10 @@
 
 ### Shipping Real Software with AI Tools and Agents
 
+[![CI](https://github.com/lion-of-naples/idea-to-poc/actions/workflows/ci.yml/badge.svg)](https://github.com/lion-of-naples/idea-to-poc/actions/workflows/ci.yml)
+
+The badge above turns green when every chapter's test suite passes — proof that the build-along code in this repo genuinely runs.
+
 This repository is the living companion project to the book **_Idea to POC: Shipping Real Software with AI Tools and Agents_**. Each chapter takes an idea from a stalled notebook or repo and walks it, step by step, into a working **proof of concept (POC)** using AI and agent tooling.
 
 The premise is simple: capable builders don't lack ideas or tools — they lack a repeatable way to close the "last mile" between an idea and a shipped, running thing. This book (and this repo) is that method, demonstrated in code. By the end you'll have shipped 8+ real POCs and internalized a build loop you can point at your own graveyard of unfinished repos.

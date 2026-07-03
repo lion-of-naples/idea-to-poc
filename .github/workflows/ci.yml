@@ -1,0 +1,83 @@
+name: CI
+
+# Runs the test suite for every chapter POC on each push and pull request,
+# so readers can confirm the build-along code genuinely passes.
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test all chapters
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Run tests for every chapter (ch01–ch09)
+        shell: bash
+        run: |
+          set -euo pipefail
+          overall_status=0
+          found_any=0
+
+          for dir in ch0[1-9]-* ch09-*; do
+            # The glob above may not match; skip non-directories.
+            [ -d "$dir" ] || continue
+          done
+
+          # Iterate chapter directories ch01 through ch09 in order.
+          for n in 1 2 3 4 5 6 7 8 9; do
+            # Match directories like ch01-devbox, ch02-..., etc.
+            for dir in ch0${n}-*; do
+              [ -d "$dir" ] || continue
+
+              # Only run if the chapter actually contains tests.
+              if ! ls "$dir"/test_*.py "$dir"/tests/test_*.py >/dev/null 2>&1; then
+                echo "::notice title=Skipping $dir::no test files found yet"
+                continue
+              fi
+
+              found_any=1
+              echo "=============================================="
+              echo ">>> Testing $dir"
+              echo "=============================================="
+
+              # Install the chapter's dependencies if it declares any.
+              if [ -f "$dir/requirements.txt" ]; then
+                pip install -r "$dir/requirements.txt"
+              else
+                pip install "pytest>=8,<9"
+              fi
+
+              # Run that chapter's tests from inside its own directory so
+              # local imports (e.g. `import devbox`) resolve correctly.
+              if (cd "$dir" && python -m pytest -q); then
+                echo "::notice title=$dir passed::tests green"
+              else
+                echo "::error title=$dir failed::tests did not pass"
+                overall_status=1
+              fi
+            done
+          done
+
+          if [ "$found_any" -eq 0 ]; then
+            echo "::warning title=No tests run::no chapter test suites were found"
+          fi
+
+          exit $overall_status

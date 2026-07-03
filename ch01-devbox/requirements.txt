@@ -1,0 +1,13 @@
+# ch01-devbox requirements
+#
+# The devbox POC itself uses ONLY the Python standard library, so there are no
+# runtime dependencies. The packages below are for development and testing.
+#
+# Install with:  pip install -r requirements.txt
+
+# --- Testing ---
+pytest>=8.0,<9.0
+
+# --- Optional dev tooling (uncomment to use) ---
+# ruff>=0.5          # fast linter + formatter
+# black>=24.0        # code formatter

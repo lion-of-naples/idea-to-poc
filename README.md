@@ -28,7 +28,7 @@ Every chapter ends with something that **runs, is tested, and is committed** —
 | # | Chapter | What you ship | Primary tool(s) | Directory |
 |---|---------|---------------|-----------------|-----------|
 | 1 | **Your Environment Is the First POC** | `devbox` — a CLI that reports whether a machine is ready to build | VS Code + Cursor | [`ch01-devbox/`](./ch01-devbox) |
-| 2 | **The Cited-Answer Research Agent** | A mini-app that answers questions with live web citations | Perplexity (Sonar) | `ch02-perplexity-research-agent/` |
+| 2 | **The Cited-Answer Research Agent** | A mini-app that answers questions with live web citations | Perplexity (Sonar) | [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent) |
 | 3 | **The Task-Doing Assistant** | A structured-output triage / summarizer tool | OpenAI API | `ch03-openai-triage/` |
 | 4 | **The Multi-Step Agent** | An agent that completes a real multi-step task | Anthropic (tool use, MCP, Agent SDK) | `ch04-anthropic-agent/` |
 | 5 | **The Open-Source Deployment** | A model-backed app deployed as a public Space | Hugging Face | `ch05-huggingface-space/` |
@@ -38,7 +38,7 @@ Every chapter ends with something that **runs, is tested, and is committed** —
 | 9 | **Ship, Host, and Share** | Deployed, documented, portfolio-ready POCs | Cloudflare + Hugging Face | `ch09-ship-host-share/` |
 | 10 | **The Repeatable POC Method** | A reusable playbook you apply to your own repos | — (synthesis) | `ch10-method/` |
 
-Chapters are added as they're written. Chapter 1 is live below.
+Chapters are added as they're written. Chapters 1 and 2 are live.
 
 ---
 

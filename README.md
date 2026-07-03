@@ -43,7 +43,7 @@ Chapters are added as they're written. Chapter 1 is live below.
 Start with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC.
 
 ```bash
-git clone https://github.com/<your-username>/idea-to-poc.git
+git clone https://github.com/lion-of-naples/idea-to-poc.git
 cd idea-to-poc/ch01-devbox
 python3 devbox.py
 ```

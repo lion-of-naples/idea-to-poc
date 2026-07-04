@@ -1,0 +1,16 @@
+# ch09-ship-host-share requirements
+#
+# Install with:  pip install -r requirements.txt
+#
+# The packager itself has NO runtime third-party dependency: its core reads a
+# POC folder and renders deploy artifacts (wrangler.toml, a Hugging Face Space
+# scaffold, a portfolio README) as plain text. Everything runs offline.
+#
+# The OPTIONAL "polish the README with a model" path imports anthropic locally,
+# only when you pass --polish with a real key. It is never touched by the tests.
+
+# --- Optional live-polish path (imported locally, only with --polish) ---
+anthropic>=0.39,<1.0    # used ONLY by the documented live README-polish path
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run fully offline (no key, no network)

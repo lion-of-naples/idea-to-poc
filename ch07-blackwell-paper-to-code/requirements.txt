@@ -1,0 +1,6 @@
+# Chapter 7 — Rao-Blackwell paper-to-code
+# numpy is a real runtime dependency (the math); gradio is only for the optional
+# web UI; pytest runs the offline, deterministic test suite.
+numpy>=1.24
+gradio>=5.0
+pytest>=8.0,<9.0

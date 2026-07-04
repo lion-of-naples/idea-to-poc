@@ -1,0 +1,9 @@
+# ch04-anthropic-agent requirements
+#
+# Install with:  pip install -r requirements.txt
+
+# --- Runtime ---
+anthropic>=0.40,<1.0    # Anthropic Python SDK (Messages API: tool use + thinking)
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run offline (no API key, no network)

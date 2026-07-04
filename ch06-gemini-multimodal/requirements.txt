@@ -1,0 +1,10 @@
+# ch06-gemini-multimodal requirements
+#
+# Install with:  pip install -r requirements.txt
+
+# --- Runtime ---
+google-genai>=1.0       # Google Gen AI SDK (Gemini multimodal + structured output)
+gradio>=5.0             # optional web UI (--serve); the CLI works without it
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run offline (no API key, no network)

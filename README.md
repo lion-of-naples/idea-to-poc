@@ -42,6 +42,17 @@ Every chapter ends with something that **runs, is tested, and is committed** —
 
 ---
 
+## Appendices
+
+The chapters assume you are comfortable with Git and with setting an API key. If either is new to you, start with these — they teach both from zero.
+
+| Appendix | What it covers |
+|---|---|
+| **A — Git & GitHub** | [`APPENDIX_A.md`](./APPENDIX_A.md) — install Git, the six commands you actually need (`init`/`status`/`add`/`commit`/`log`/`clone`), create a GitHub account, push your own work, and authenticate (`gh auth` or a personal access token). |
+| **B — API Keys & Environment Variables** | [`APPENDIX_B.md`](./APPENDIX_B.md) — what an API key and an environment variable are, what `export` does, the `.env` pattern, step-by-step key creation for all five providers (OpenAI, Anthropic, Perplexity, Google AI Studio, Hugging Face), and how to keep keys safe. |
+
+---
+
 ## Start here
 
 All ten chapters are live. Begin with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC — then work forward through [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent), [`ch03-openai-triage/`](./ch03-openai-triage), [`ch04-anthropic-agent/`](./ch04-anthropic-agent), [`ch05-huggingface-space/`](./ch05-huggingface-space), [`ch06-gemini-multimodal/`](./ch06-gemini-multimodal), [`ch07-blackwell-paper-to-code/`](./ch07-blackwell-paper-to-code), [`ch08-agent-orchestration/`](./ch08-agent-orchestration), and [`ch09-ship-host-share/`](./ch09-ship-host-share), and finish with [`ch10-method/`](./ch10-method) — the whole method as a tool you point at your own repos.

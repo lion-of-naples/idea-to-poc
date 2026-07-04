@@ -33,18 +33,18 @@ Every chapter ends with something that **runs, is tested, and is committed** —
 | 4 | **The Multi-Step Agent** | An agent that completes a real multi-step task | Anthropic (tool use, MCP, Agent SDK) | [`ch04-anthropic-agent/`](./ch04-anthropic-agent) |
 | 5 | **The Open-Source Deployment** | A model-backed app deployed as a public Space | Hugging Face | [`ch05-huggingface-space/`](./ch05-huggingface-space) |
 | 6 | **The Multimodal Build** | An image → structured-report POC | Google AI (Gemini) | [`ch06-gemini-multimodal/`](./ch06-gemini-multimodal) |
-| 7 | **From Research Paper to Running Code** | A minimal working demo of a real algorithm | Blackwell survey + GenAI overview | `ch07-blackwell-paper-to-code/` |
+| 7 | **From Research Paper to Running Code** | A runnable, self-verifying implementation of the Rao-Blackwell theorem | Blackwell AI survey | [`ch07-blackwell-paper-to-code/`](./ch07-blackwell-paper-to-code) |
 | 8 | **Orchestrating Agents to Build For You** | An idea taken to POC with minimal hand-coding | Cursor agents + Anthropic Agent SDK | `ch08-agent-orchestration/` |
 | 9 | **Ship, Host, and Share** | Deployed, documented, portfolio-ready POCs | Cloudflare + Hugging Face | `ch09-ship-host-share/` |
 | 10 | **The Repeatable POC Method** | A reusable playbook you apply to your own repos | — (synthesis) | `ch10-method/` |
 
-Chapters are added as they're written. Chapters 1, 2, 3, 4, 5, and 6 are live.
+Chapters are added as they're written. Chapters 1, 2, 3, 4, 5, 6, and 7 are live.
 
 ---
 
 ## Start here
 
-Chapters 1–6 are live. Begin with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC — then work forward through [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent), [`ch03-openai-triage/`](./ch03-openai-triage), [`ch04-anthropic-agent/`](./ch04-anthropic-agent), [`ch05-huggingface-space/`](./ch05-huggingface-space), and [`ch06-gemini-multimodal/`](./ch06-gemini-multimodal).
+Chapters 1–7 are live. Begin with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC — then work forward through [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent), [`ch03-openai-triage/`](./ch03-openai-triage), [`ch04-anthropic-agent/`](./ch04-anthropic-agent), [`ch05-huggingface-space/`](./ch05-huggingface-space), [`ch06-gemini-multimodal/`](./ch06-gemini-multimodal), and [`ch07-blackwell-paper-to-code/`](./ch07-blackwell-paper-to-code).
 
 ```bash
 git clone https://github.com/lion-of-naples/idea-to-poc.git

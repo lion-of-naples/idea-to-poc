@@ -1,0 +1,15 @@
+# ch05-huggingface-space requirements
+#
+# Install with:  pip install -r requirements.txt
+#
+# NOTE FOR THE SPACE: Hugging Face installs this same file when it builds your
+# Space. The runtime lines below (gradio + huggingface_hub) are all the deployed
+# app needs; pytest is only used to run the offline tests locally / in CI and is
+# harmless to install on the Space.
+
+# --- Runtime (what the Space serves) ---
+gradio>=5.0             # the web UI framework the Space runs
+huggingface_hub>=0.24   # InferenceClient -> call hosted models, no local GPU
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run offline (no HF token, no network)

@@ -1,0 +1,28 @@
+# --- Secrets: never commit these ---
+.env
+.env.*
+*.env
+*.key
+*.pem
+credentials.json
+
+# --- Generated output ---
+*.md.out
+runs/
+
+# --- Gradio ---
+gradio_cached_examples/
+flagged/
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# --- Editor / OS ---
+.DS_Store
+.idea/
+*.swp

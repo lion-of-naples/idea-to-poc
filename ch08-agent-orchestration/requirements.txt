@@ -1,0 +1,6 @@
+# Runtime: only needed to run the orchestrator LIVE against Claude.
+# The offline test suite needs NONE of this (a scripted fake stands in).
+anthropic>=0.39,<1.0
+
+# Tests
+pytest>=8.0,<9.0

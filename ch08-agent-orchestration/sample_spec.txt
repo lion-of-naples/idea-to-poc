@@ -1,0 +1,3 @@
+A single-file command-line todo app in Python (add, list, and complete tasks,
+stored in a local JSON file), plus a pytest test file that covers adding and
+completing a task. No external dependencies beyond the standard library.

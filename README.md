@@ -44,13 +44,13 @@ Every chapter ends with something that **runs, is tested, and is committed** —
 
 ## Appendices
 
-The chapters assume you are comfortable with Git, with setting an API key, and with Python virtual environments. If any of those is new to you, start with these — they teach each from zero.
+New to any of this? The appendices are ordered the way a newcomer meets each skill while working through the book — set up Python first, then Git to get the code, then API keys for the live runs. Read whichever are new to you before Chapter 1.
 
 | Appendix | What it covers |
 |---|---|
-| **A — Git & GitHub** | [`APPENDIX_A.md`](./APPENDIX_A.md) — install Git, the six commands you actually need (`init`/`status`/`add`/`commit`/`log`/`clone`), create a GitHub account, push your own work, and authenticate (`gh auth` or a personal access token). |
-| **B — API Keys & Environment Variables** | [`APPENDIX_B.md`](./APPENDIX_B.md) — what an API key and an environment variable are, what `export` does, the `.env` pattern, step-by-step key creation for all five providers (OpenAI, Anthropic, Perplexity, Google AI Studio, Hugging Face), and how to keep keys safe. |
-| **C — Python & Virtual Environments** | [`APPENDIX_C.md`](./APPENDIX_C.md) — install Python, what a virtual environment is and why every chapter makes one, `venv` / `pip` / `requirements.txt`, running the tools and tests, the full clone-to-run loop, and troubleshooting. |
+| **A — Python & Virtual Environments** | [`APPENDIX_A.md`](./APPENDIX_A.md) — install Python, what a virtual environment is and why every chapter makes one, `venv` / `pip` / `requirements.txt`, running the tools and tests, the full clone-to-run loop, and troubleshooting. |
+| **B — Git & GitHub** | [`APPENDIX_B.md`](./APPENDIX_B.md) — install Git, the six commands you actually need (`init`/`status`/`add`/`commit`/`log`/`clone`), create a GitHub account, push your own work, and authenticate (`gh auth` or a personal access token). |
+| **C — API Keys & Environment Variables** | [`APPENDIX_C.md`](./APPENDIX_C.md) — what an API key and an environment variable are, what `export` does, the `.env` pattern, step-by-step key creation for all five providers (OpenAI, Anthropic, Perplexity, Google AI Studio, Hugging Face), and how to keep keys safe. |
 
 ---
 

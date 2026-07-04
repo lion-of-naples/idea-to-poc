@@ -1,220 +1,189 @@
-# Appendix B — API Keys & Environment Variables
+# Appendix B — Git & GitHub for People Who Skipped Them
 
 *From the book* **Idea to POC: Shipping Real Software with AI Tools and Agents**
 
-From Chapter 2 onward, every live run in this book starts the same way:
+Every chapter in this book ends the same way: with a `git commit`. Chapter 1 runs `git init`; later chapters tell you to "clone the repo" or "push it to your companion GitHub org." If those instructions felt like they assumed something you were never taught, this appendix is for you. You do not need to be a Git expert to finish this book — you need about six commands and one mental model. That is all this appendix teaches, in the order you will actually need them.
 
-```bash
-export SOMETHING_API_KEY="..."
-python3 the_tool.py
-```
-
-Two things are assumed there that this book never actually explains: what an **API key** is, and what `export` does. This appendix fills both gaps from zero, then walks you through getting a key from each of the five providers the book uses. You do not need to read it front to back — get one key working (say OpenAI or Google), and the rest follow the same shape.
-
-One reassuring fact first: **you never need a key to run the tests.** Every chapter's test suite is offline by design — no key, no network, no vendor SDK. Keys are only for the "make it real" step, where the tool talks to a live model. If you just want to see the code work, skip straight to `pytest`.
+If you already commit and push comfortably, skip this. If your palms sweat when someone says "just rebase it," you are exactly who this is for — and the good news is you can ignore rebasing entirely and still ship everything in this book.
 
 ---
 
-## B.1 What an API key is
+## B.1 The one mental model
 
-An **API** (Application Programming Interface) is how one program talks to another over the internet. When your `triage.py` "calls OpenAI," it sends an HTTPS request to OpenAI's servers and gets a response back. The server needs to know *who is asking* — both to check you are allowed and to bill the request to the right account. That is what an **API key** is: a long secret string, unique to your account, that you attach to each request to prove it is you.
+**Git** is a program that runs on your computer and records snapshots of a folder over time. Each snapshot is called a **commit**. A folder that Git is tracking is called a **repository** (**repo** for short). That is the whole idea: a repo is a folder with a memory.
 
-Think of it as a password that is meant for programs instead of humans. It usually looks like a prefix plus a long random tail:
+**GitHub** is a website that stores a *copy* of your repo in the cloud so other people (and other machines) can get it. Git is the tool; GitHub is one place to keep repos. They are not the same thing, and you can use Git for years without ever touching GitHub. In this book we use both: Git to record your work, GitHub to share it and to run the automated tests (the green **CI** badge on the repo's front page).
 
-| Provider | Key looks like | Environment variable this book uses |
-|---|---|---|
-| OpenAI | `sk-...` | `OPENAI_API_KEY` |
-| Anthropic | `sk-ant-...` | `ANTHROPIC_API_KEY` |
-| Perplexity | `pplx-...` | `PERPLEXITY_API_KEY` |
-| Google AI (Gemini) | (long random string) | `GEMINI_API_KEY` |
-| Hugging Face | `hf_...` | `HF_TOKEN` |
+The flow you will repeat all book long is short:
 
-Because a key is a password, two rules matter from the very start: **never share it, and never commit it to Git** (B.6–B.7). Anyone who has your key can spend your money.
+```
+edit files → git add → git commit  → (occasionally) git push → GitHub
+                     └── local, on your machine ──┘   └── cloud ──┘
+```
+
+Everything before `push` happens entirely on your laptop, offline. `push` is the only step that talks to GitHub.
 
 ---
 
-## B.2 What an environment variable is (and what `export` does)
+## B.2 Install Git (once per machine)
 
-An **environment variable** is a named value that lives in your terminal session and that any program you launch can read. `PATH`, which tells your shell where to find programs, is one you already rely on. We use environment variables to hand a key to a program *without writing the key into the code* — because code gets committed to Git, and keys must not.
-
-The command that sets one, on macOS and Linux, is `export`:
+Check whether you already have it. Open a terminal (on macOS, the **Terminal** app; on Windows, **PowerShell** or the **Git Bash** shell you are about to install; on Linux, your usual terminal) and type:
 
 ```bash
-export OPENAI_API_KEY="sk-...your key here..."
+git --version
 ```
 
-That line puts the value into your current terminal session. Now any program you start *from that same terminal* can read it. In Python, the tools in this book read it like so:
+If you see something like `git version 2.43.0`, you are done — skip to B.3. If you get "command not found," install it:
 
-```python
-import os
-key = os.environ.get("OPENAI_API_KEY")   # returns the string you exported
-```
+- **macOS** — the simplest path is to run `git --version` once; macOS offers to install the Xcode Command Line Tools, which include Git. Or, if you use [Homebrew](https://brew.sh), run `brew install git`.
+- **Windows** — download and run the installer from [git-scm.com/download/win](https://git-scm.com/download/win). Accept the defaults; this also gives you the **Git Bash** terminal, which behaves like the macOS/Linux examples in this book.
+- **Linux** — `sudo apt install git` (Debian/Ubuntu) or `sudo dnf install git` (Fedora).
 
-That is the whole handshake: you `export` the key into the terminal; the program reads it from the environment with `os.environ`. The key never appears in a source file.
+Run `git --version` again to confirm.
 
-To check what you have set (without revealing the whole value):
+Then tell Git who you are — it stamps this onto every commit. Do this once:
 
 ```bash
-echo ${OPENAI_API_KEY:0:7}    # prints just the first 7 characters, e.g. sk-proj
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
 ```
 
-> **Windows note.** In **PowerShell**, the syntax differs: `` $env:OPENAI_API_KEY="sk-..." `` sets it for the session, and `$env:OPENAI_API_KEY` reads it. If you installed **Git Bash** (Appendix A), you can use the `export` syntax exactly as written throughout the book.
+Use the same email you will use for GitHub (B.4); it links your commits to your account.
 
 ---
 
-## B.3 The catch: `export` only lasts for one terminal session
+## B.3 Your first repo: the six commands you actually need
 
-This trips up everyone once. An `export` lives only in the terminal window where you ran it. Close that window — or open a second one — and the variable is gone. That is why re-running a chapter's live command in a fresh terminal sometimes fails with "API key not set" even though "it worked yesterday."
+This is the loop from Chapter 1, spelled out. Suppose you have a project folder:
 
-You have three ways to deal with this, from most casual to most robust:
+```bash
+cd my-project              # move into the folder
+git init                   # start tracking it — creates a hidden .git/ folder
+```
 
-1. **Re-export each session.** Fine for a quick one-off. Paste the `export` line again whenever you open a new terminal.
-2. **Add it to your shell profile — persists across sessions.** Append the `export` line to the file your shell reads on startup — `~/.zshrc` on modern macOS, `~/.bashrc` on most Linux and Git Bash. Then run `source ~/.zshrc` (or open a new terminal) and it is set automatically every time. Good for a key you use constantly.
-3. **Use a `.env` file — best for projects (recommended).** Keep the keys in a file *next to the project* and load them on demand. This is the approach we recommend for the book; the next section shows it.
+`git init` is the one-time step that turns an ordinary folder into a repo. You will not run it again for this project.
+
+Now the loop you repeat forever:
+
+```bash
+git status                 # 1. what have I changed? (safe; changes nothing)
+git add -A                 # 2. stage everything for the next snapshot
+git commit -m "message"    # 3. take the snapshot, with a note
+```
+
+- **`git status`** is your most-used command. It never changes anything — it just tells you what is modified, what is staged, and what is untracked. When confused, run it.
+- **`git add -A`** stages your changes. "Staging" means "these are the files I want in my next commit." The `-A` means *all* changed files.
+- **`git commit -m "..."`** records the snapshot. The message should say what changed, e.g. `git commit -m "ch03: add triage CLI + tests"`. That is the exact style every chapter uses.
+
+To see your history:
+
+```bash
+git log --oneline          # a compact list of past commits
+```
+
+That is genuinely most of Git. Six commands — `init`, `status`, `add`, `commit`, `log`, and (next) `clone` — carry you through the entire book.
+
+> **The `.gitignore` file — the one thing beginners forget.** Some files should *never* be committed: your virtual environment (`.venv/`), Python caches (`__pycache__/`), and — critically — anything with a secret in it (`.env`). Create a plain-text file named `.gitignore` in the repo root listing them, one per line:
+>
+> ```
+> .venv/
+> __pycache__/
+> .pytest_cache/
+> .env
+> ```
+>
+> Git will then pretend those files do not exist for commit purposes. Every chapter's repo ships a `.gitignore`; if you start a fresh project, write one *before* your first commit. Appendix C explains why committing a `.env` can leak an API key to the whole internet.
 
 ---
 
-## B.4 The `.env` file pattern (recommended)
+## B.4 Create a GitHub account and get the book's code
 
-Create a plain-text file named `.env` in the project folder:
-
-```
-OPENAI_API_KEY=sk-...your key...
-ANTHROPIC_API_KEY=sk-ant-...
-GEMINI_API_KEY=...
-```
-
-(No `export`, no quotes needed, one `KEY=value` per line.)
-
-Then, in the same terminal, load every line into your environment with one command:
+Getting the companion code onto your machine does not require an account at all — the repo is public:
 
 ```bash
-set -a && source .env && set +a      # export everything defined in .env
-python3 the_tool.py                  # now the tool can read the keys
+git clone https://github.com/lion-of-naples/idea-to-poc.git
+cd idea-to-poc
 ```
 
-`set -a` tells the shell "auto-export anything I define next," `source .env` runs the file, and `set +a` turns that behavior back off. The keys are now in your environment for that session.
+`git clone` downloads a full copy of the repo, history and all, into a new folder. This is how you follow along: clone once, then `cd` into each chapter's folder.
 
-**The non-negotiable rule:** add `.env` to your `.gitignore` *before you ever commit* (see Appendix A.3). A `.env` file full of live keys committed to a public repo is the single most common way people leak credentials. Every chapter's `.gitignore` in this repo already lists `.env` for exactly this reason.
+You only need a **GitHub account** when you want to *push your own* work to the cloud (the optional stretch goals, and anything you build after the book). To make one:
+
+1. Go to [github.com](https://github.com) and click **Sign up**. Use the same email you put in `git config` (B.2).
+2. Pick a username — this becomes part of your repo URLs (`github.com/<username>/<repo>`), so choose something you would put on a résumé.
+3. Verify your email when GitHub sends the confirmation.
+
+That is it. A free account is all you need for everything in this book.
 
 ---
 
-## B.5 Getting a key from each provider
+## B.5 Push your own work to GitHub
 
-All five follow the same shape: sign in, find the API-keys page, click *create*, copy the key immediately (most show it only once), and set a spend limit if the provider offers one. Exact button labels drift over time; the URLs below are the stable entry points.
+Say you have built something locally and want it in the cloud. First create an empty repo on the website:
 
-### OpenAI — `OPENAI_API_KEY` (Chapter 3)
+1. On [github.com](https://github.com), click the **+** in the top-right → **New repository**.
+2. Give it a name. Leave **Public** or **Private** as you prefer (public is fine for portfolio work; private keeps it to yourself).
+3. **Do not** check "Add a README" if you already have local files — it avoids a first-push conflict.
+4. Click **Create repository**. GitHub then shows you a URL like `https://github.com/<you>/<repo>.git`.
 
-1. Sign in at [platform.openai.com](https://platform.openai.com) (the *developer platform*, which is separate from ChatGPT).
-2. Open **API keys** from the left sidebar, or go straight to [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
-3. Click **Create new secret key**, name it, and **copy it now** — it starts with `sk-` and is shown only once.
-4. API usage is pay-as-you-go and requires a payment method under **Settings → Billing**; set a monthly **usage limit** there while you are at it.
-
-```bash
-export OPENAI_API_KEY="sk-..."
-```
-
-### Anthropic — `ANTHROPIC_API_KEY` (Chapters 4, 8, 9, 10)
-
-1. Sign in at [console.anthropic.com](https://console.anthropic.com) (a *developer* account, separate from a Claude.ai chat subscription).
-2. Open **API keys** (under the account menu / settings), or [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys).
-3. Click **Create Key**, name it, and **copy it now** — it starts with `sk-ant-`.
-4. Add credits under **Billing**; you can set spend limits there.
+Back in your terminal, connect your local repo to that URL and push:
 
 ```bash
-export ANTHROPIC_API_KEY="sk-ant-..."
+git remote add origin https://github.com/<you>/<repo>.git
+git branch -M main
+git push -u origin main
 ```
 
-### Perplexity — `PERPLEXITY_API_KEY` (Chapter 2)
+- **`git remote add origin <url>`** tells your local repo where "the cloud copy" lives. `origin` is just the conventional nickname for it.
+- **`git push`** uploads your commits. The `-u origin main` part sets `main` as the default so that, from then on, you can push with a bare `git push`.
 
-1. Sign in at [perplexity.ai](https://www.perplexity.ai) and open the **API** developer portal at [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api).
-2. Add a payment method / buy credits (the Sonar API is billed separately from a Perplexity Pro subscription).
-3. Click **Generate** (or "Create API Key") and **copy it** — it starts with `pplx-`.
-
-```bash
-export PERPLEXITY_API_KEY="pplx-..."
-```
-
-### Google AI Studio — `GEMINI_API_KEY` (Chapter 6)
-
-The friendliest of the five: it has a genuinely free tier, so you can run Chapter 6 at no cost.
-
-1. Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in with a Google account.
-2. Click **Create API key** (you may be asked to pick or create a Google Cloud project — accept the default).
-3. **Copy the key.** It is a long random string with no fixed prefix.
-
-```bash
-export GEMINI_API_KEY="..."
-```
-
-### Hugging Face — `HF_TOKEN` (Chapter 5)
-
-Hugging Face calls its key an **access token**, and the *type* matters for this book.
-
-1. Create a free account at [huggingface.co](https://huggingface.co) and sign in.
-2. Go to **Settings → Access Tokens**, or [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens).
-3. Click **Create new token**. Choose the **Write** type — Chapter 5 *deploys* a Space, which needs write access (a read-only token will fail at deploy time). Name it and **copy it** — it starts with `hf_`.
-
-```bash
-export HF_TOKEN="hf_..."      # must be a WRITE token for ch05
-```
+After the first setup, your daily rhythm is simply: `git add -A`, `git commit -m "..."`, `git push`.
 
 ---
 
-## B.6 Keeping keys safe — the short list
+## B.6 Authentication: the part that trips everyone up
 
-- **Never commit a key.** Put `.env` in `.gitignore` before your first commit (Appendix A.3). Never paste a key directly into a `.py` file.
-- **Never paste a key into a chat, screenshot, issue, or Slack message.** If it lands anywhere others can read it, consider it burned.
-- **Set a spend limit** wherever the provider allows one (OpenAI, Anthropic). It caps the damage from a runaway loop or a leaked key.
-- **One key per purpose,** named clearly ("book-ch03", "laptop") so you can revoke a single one without breaking everything else.
-- **Prefer the least privilege that works** — e.g. a Hugging Face *read* token for pulling models, and a *write* token only where you actually deploy.
+The first time you `git push`, GitHub needs to know it is really you. **GitHub no longer accepts your account password on the command line** — this surprises everyone. You have two good options; pick one.
 
----
-
-## B.7 If you leak a key (it happens — fix it fast)
-
-Committed a `.env` to a public repo? Pasted a key in a screenshot? Do not panic, but do act immediately, because bots scan public GitHub for keys within *minutes*.
-
-1. **Revoke / delete the key** in the provider's dashboard (the same API-keys page where you made it). This instantly makes the leaked value useless — this is the step that actually protects you.
-2. **Generate a new key** and update your `.env` (or `export`).
-3. **Remove the file from the repo** and add it to `.gitignore`: `git rm --cached .env && git commit -m "remove leaked .env"`. Note that the old value still lives in Git *history*, which is exactly why step 1 (revocation) is the one that matters — rewriting history is optional once the key is dead.
-4. **Check your usage/billing** for anything you did not do.
-
-Revoking is fast and free. When in doubt, revoke and reissue — it costs you thirty seconds and a copy-paste.
-
----
-
-## B.8 Quick reference
+**Option 1 — GitHub CLI (easiest).** Install the official `gh` tool from [cli.github.com](https://cli.github.com), then run:
 
 ```bash
-# set for this terminal session (macOS / Linux / Git Bash)
-export OPENAI_API_KEY="sk-..."
-
-# persist across sessions (add to your shell profile, then reopen the terminal)
-echo 'export OPENAI_API_KEY="sk-..."' >> ~/.zshrc     # or ~/.bashrc
-
-# recommended: a .env file next to the project (and .gitignore'd)
-set -a && source .env && set +a
-
-# confirm a key is set, without printing the whole thing
-echo ${OPENAI_API_KEY:0:7}
+gh auth login
 ```
 
-| Provider | Get a key at | Env var | Cost note |
-|---|---|---|---|
-| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) | `OPENAI_API_KEY` | Pay-as-you-go; set a limit |
-| Anthropic | [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys) | `ANTHROPIC_API_KEY` | Prepaid credits |
-| Perplexity | [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api) | `PERPLEXITY_API_KEY` | Credits, separate from Pro |
-| Google AI | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) | `GEMINI_API_KEY` | Free tier available |
-| Hugging Face | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) | `HF_TOKEN` | Free; use a **Write** token for ch05 |
+Answer the prompts (choose **GitHub.com**, **HTTPS**, and **Login with a web browser**). It opens a browser, you approve once, and Git will authenticate automatically from then on. This is the least fiddly path and the one we recommend.
+
+**Option 2 — a Personal Access Token (PAT).** If you push over HTTPS without `gh`, Git will ask for a "password." That password is not your account password — it is a token you generate:
+
+1. On GitHub, go to **Settings → Developer settings → Personal access tokens → Tokens (classic)** — or open [github.com/settings/tokens](https://github.com/settings/tokens).
+2. Click **Generate new token (classic)**, give it a name, set an expiry, and check the **`repo`** scope.
+3. Click **Generate token** and **copy it now** — GitHub shows it only once.
+4. When `git push` asks for your password, paste the token instead. Your OS keychain will usually remember it after the first time.
+
+Treat a PAT exactly like an API key (Appendix C): it is a secret, it grants access to your repos, and you should never paste it into a file you might commit.
+
+---
+
+## B.7 The five ways you will get stuck, and the fixes
+
+- **"fatal: not a git repository."** You are not inside a repo folder. `cd` into the project, or run `git init` if it is a brand-new folder.
+- **"Authentication failed" on push.** You used your account password instead of a token, or you have not run `gh auth login`. See B.6.
+- **You committed a `.venv/` or a `.env` by accident.** Add it to `.gitignore`, then run `git rm -r --cached .venv` (or the filename) and commit again. If a *secret* was committed, treat it as leaked: rotate the key immediately (Appendix C.7).
+- **"Your branch is behind."** The cloud copy has commits you do not have locally (common when you edit on two machines). Run `git pull` to bring them down, then push.
+- **You are simply lost.** Run `git status`. It almost always tells you the next move. Nothing you can do with `add`, `commit`, and `push` will lose committed work — commits are snapshots, and Git keeps them.
+
+---
+
+## B.8 What you can safely ignore (for now)
+
+Git is enormous, and most of it is optional for shipping POCs. You do **not** need branching, merging, rebasing, stashing, cherry-picking, or pull requests to complete this book. They are powerful once you collaborate with others, and worth learning later — but if you only ever `add`, `commit`, `push`, and occasionally `pull`, you can ship every project in these ten chapters. Learn the rest when a real need for it shows up, not before.
 
 ---
 
 *Further reading:*
 
-- *OpenAI — API keys & safety best practices:* [platform.openai.com/docs](https://platform.openai.com/docs/quickstart)
-- *Anthropic — getting started:* [docs.anthropic.com](https://docs.anthropic.com/en/docs/get-started)
-- *Perplexity — API getting started:* [docs.perplexity.ai](https://docs.perplexity.ai/getting-started/quickstart)
-- *Google — Gemini API keys:* [ai.google.dev/gemini-api/docs/api-key](https://ai.google.dev/gemini-api/docs/api-key)
-- *Hugging Face — user access tokens:* [huggingface.co/docs — security tokens](https://huggingface.co/docs/hub/security-tokens)
+- *Git — the official book (free):* [git-scm.com/book](https://git-scm.com/book/en/v2)
+- *GitHub's own quickstart:* [docs.github.com/get-started](https://docs.github.com/en/get-started/quickstart)
+- *GitHub CLI:* [cli.github.com](https://cli.github.com)
+- *Personal access tokens:* [docs.github.com — managing PATs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 - *Companion repo:* [github.com/lion-of-naples/idea-to-poc](https://github.com/lion-of-naples/idea-to-poc)

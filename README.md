@@ -36,15 +36,15 @@ Every chapter ends with something that **runs, is tested, and is committed** —
 | 7 | **From Research Paper to Running Code** | A runnable, self-verifying implementation of the Rao-Blackwell theorem | Blackwell AI survey | [`ch07-blackwell-paper-to-code/`](./ch07-blackwell-paper-to-code) |
 | 8 | **Orchestrating Agents to Build For You** | A team of agents (planner/coder/reviewer) that builds a small project from a one-line spec | Anthropic (multi-agent) | [`ch08-agent-orchestration/`](./ch08-agent-orchestration) |
 | 9 | **Ship, Host, and Share** | Deployed, documented, portfolio-ready POCs | Cloudflare + Hugging Face | [`ch09-ship-host-share/`](./ch09-ship-host-share) |
-| 10 | **The Repeatable POC Method** | A reusable playbook you apply to your own repos | — (synthesis) | `ch10-method/` |
+| 10 | **The Repeatable POC Method** | A reusable playbook you apply to your own repos | — (synthesis) | [`ch10-method/`](./ch10-method) |
 
-Chapters are added as they're written. Chapters 1, 2, 3, 4, 5, 6, 7, 8, and 9 are live.
+**All ten chapters are live.** The book is complete: every chapter ships a runnable, tested POC, and Chapter 10 turns the method itself into a tool you can point at your own repos.
 
 ---
 
 ## Start here
 
-Chapters 1–9 are live. Begin with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC — then work forward through [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent), [`ch03-openai-triage/`](./ch03-openai-triage), [`ch04-anthropic-agent/`](./ch04-anthropic-agent), [`ch05-huggingface-space/`](./ch05-huggingface-space), [`ch06-gemini-multimodal/`](./ch06-gemini-multimodal), [`ch07-blackwell-paper-to-code/`](./ch07-blackwell-paper-to-code), [`ch08-agent-orchestration/`](./ch08-agent-orchestration), and [`ch09-ship-host-share/`](./ch09-ship-host-share).
+All ten chapters are live. Begin with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC — then work forward through [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent), [`ch03-openai-triage/`](./ch03-openai-triage), [`ch04-anthropic-agent/`](./ch04-anthropic-agent), [`ch05-huggingface-space/`](./ch05-huggingface-space), [`ch06-gemini-multimodal/`](./ch06-gemini-multimodal), [`ch07-blackwell-paper-to-code/`](./ch07-blackwell-paper-to-code), [`ch08-agent-orchestration/`](./ch08-agent-orchestration), and [`ch09-ship-host-share/`](./ch09-ship-host-share), and finish with [`ch10-method/`](./ch10-method) — the whole method as a tool you point at your own repos.
 
 ```bash
 git clone https://github.com/lion-of-naples/idea-to-poc.git

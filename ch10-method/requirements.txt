@@ -1,0 +1,16 @@
+# ch10-method requirements
+#
+# Install with:  pip install -r requirements.txt
+#
+# The method kit has NO runtime third-party dependency: its core scaffolds new
+# POC skeletons and lints existing repos against the book's rules using only the
+# Python standard library. Everything runs offline.
+#
+# The OPTIONAL "advise" path imports anthropic locally, only when you pass
+# --advise with a real key. It is never touched by the tests.
+
+# --- Optional live-advise path (imported locally, only with --advise) ---
+anthropic>=0.39,<1.0    # used ONLY by the documented live "advise" path
+
+# --- Testing ---
+pytest>=8.0,<9.0        # the unit tests run fully offline (no key, no network)

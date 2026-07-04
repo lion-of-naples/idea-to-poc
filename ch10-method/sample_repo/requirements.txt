@@ -1,0 +1,3 @@
+# scaffolded POC requirements
+anthropic>=0.39,<1.0    # imported locally in the edge, only when run live
+pytest>=8.0,<9.0        # offline tests

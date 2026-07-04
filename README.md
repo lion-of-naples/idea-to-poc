@@ -8,7 +8,7 @@ The badge above turns green when every chapter's test suite passes — proof tha
 
 This repository is the living companion project to the book **_Idea to POC: Shipping Real Software with AI Tools and Agents_**. Each chapter takes an idea from a stalled notebook or repo and walks it, step by step, into a working **proof of concept (POC)** using AI and agent tooling.
 
-The premise is simple: capable builders don't lack ideas or tools — they lack a repeatable way to close the "last mile" between an idea and a shipped, running thing. This book (and this repo) is that method, demonstrated in code. By the end you'll have shipped 8+ real POCs and internalized a build loop you can point at your own graveyard of unfinished repos.
+The premise is simple: capable builders don't lack ideas or tools — they lack a repeatable way to close the "last mile" between an idea and a shipped, running thing. This book (and this repo) is that method, demonstrated in code. By the end you'll have shipped a stack of real POCs and internalized a build loop you can point at your own graveyard of unfinished repos.
 
 Every chapter ends with something that **runs, is tested, and is committed** — an artifact that exists outside your head.
 
@@ -42,15 +42,17 @@ Chapters are added as they're written. Chapters 1, 2, and 3 are live.
 
 ---
 
-## Chapter 1 is ready
+## Start here
 
-Start with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC.
+Chapters 1–3 are live. Begin with [`ch01-devbox/`](./ch01-devbox) — it builds the AI-native environment every later chapter depends on and ships your first POC — then work forward through [`ch02-perplexity-research-agent/`](./ch02-perplexity-research-agent) and [`ch03-openai-triage/`](./ch03-openai-triage).
 
 ```bash
 git clone https://github.com/lion-of-naples/idea-to-poc.git
 cd idea-to-poc/ch01-devbox
-python3 devbox.py
+python3 devbox.py          # ch01 needs no dependencies; just run it
 ```
+
+Each chapter has its own README with setup, run, and test steps. Chapters 2+ use a virtual environment and a `requirements.txt`.
 
 ---
 

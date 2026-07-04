@@ -27,6 +27,12 @@ A single-file CLI (`triage.py`) that:
 
 Plus an offline test suite that runs in CI with **no API key and no network**.
 
+## Requirements
+
+- **Python 3.10+**
+- An OpenAI API key (`OPENAI_API_KEY`) — only needed to run live; the tests run offline.
+- `pip install -r requirements.txt`
+
 ## Quickstart
 
 ```bash

@@ -23,7 +23,7 @@ The tool exits with code `0` when the core build tools (Python + git) are availa
 
 ## Requirements
 
-- **Python 3.9+** (uses only the standard library at runtime — no external dependencies to run it).
+- **Python 3.10+** (uses only the standard library at runtime — no external dependencies to run it; matches the versions CI tests against).
 - `pytest` only if you want to run the tests (see below).
 
 ---

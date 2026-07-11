@@ -7,6 +7,7 @@ tooling UI changes.
 
 | File | Callout | What to capture |
 | --- | --- | --- |
+| `cursor-anatomy.png` | Step 3.2, "Get your bearings" | The full Cursor window with the `ch01-devbox` folder open, annotated with labels for: **Explorer** sidebar (left), **Editor** pane (center), **Terminal** panel (bottom, via View → Terminal), **AI panel / Chat & Agent** (right), and the **New Chat / New Agent** buttons up top (labelled "AI session, not a file"). Add the labels in an image editor before committing. |
 | `venv-activated.png` | Step 3.2, after `source .venv/bin/activate` | Terminal showing the prompt now prefixed with `(.venv)`. |
 | `new-file-ui.png` | Step 3.2, "Where the code goes" | Cursor Explorer sidebar with the `ch01-devbox` folder hovered and the **New File...** icon highlighted. |
 | `readiness-report.png` | Step 3.4, after `python3 devbox.py` | Terminal showing the full `AM I READY TO BUILD?` report ending in `READY ✅`. |

@@ -7,9 +7,9 @@ tooling UI changes.
 
 | File | Callout | What to capture |
 | --- | --- | --- |
-| `cursor-anatomy.png` | Step 3.2, "Get your bearings" | The full Cursor window with the `ch01-devbox` folder open, annotated with labels for: **Explorer** sidebar (left), **Editor** pane (center), **Terminal** panel (bottom, via View → Terminal), **AI panel / Chat & Agent** (right), and the **New Chat / New Agent** buttons up top (labelled "AI session, not a file"). Add the labels in an image editor before committing. |
+| `cursor-anatomy.png` | Step 3.2, "Get your bearings" | The full Cursor window with `ch01-devbox` open, annotated for the current AI-first layout: **left rail** (New Agent / Search / Repositories — label "not the file tree"), **agent/chat panel** (center-left, the "Plan, Build…" box), **editor pane** (center, with Browser/zsh/file tabs on top), and the **file panel on the right** (`ch01-devbox` header + files). Add the labels in an image editor before committing. |
 | `venv-activated.png` | Step 3.2, after `source .venv/bin/activate` | Terminal showing the prompt now prefixed with `(.venv)`. |
-| `new-file-ui.png` | Step 3.2, "Where the code goes" | Cursor Explorer sidebar with the `ch01-devbox` folder hovered and the **New File...** icon highlighted. |
+| `new-file-ui.png` | Step 3.2, "Where the code goes" | The right-hand file panel with the `ch01-devbox` header hovered and the **New File** button visible at its top-right. (The author's screenshot already captures this exact state.) |
 | `readiness-report.png` | Step 3.4, after `python3 devbox.py` | Terminal showing the full `AM I READY TO BUILD?` report ending in `READY ✅`. |
 | `ci-green.png` | Step 3.6, after the commit | The repo on GitHub showing a green passing check / Actions badge. |
 

@@ -14,6 +14,6 @@ tooling UI changes.
 | `gh-install.png` | Step 3.7, install the GitHub CLI | Terminal running `brew install gh` (Homebrew formula download). | ✅ captured |
 | `push-to-github.png` | Step 3.7, Option A push | Terminal showing the full `gh auth login` device-code flow (one-time code shown **in the terminal**) and `gh repo create … --source=. --remote=origin --push` succeeding. | ✅ captured |
 | `ci-green.png` | Step 3.7, after CI runs | The repo README on GitHub showing the green **CI passing** badge. | ✅ captured |
-| `readiness-report.png` | Step 3.4, after `python3 devbox.py` | Terminal showing the full `AM I READY TO BUILD?` report ending in `READY ✅`. | ⏳ needed |
+| `readiness-report.png` | Step 3.4, after `python3 devbox.py` | Terminal showing the full `AM I READY TO BUILD?` report (Python/git/node/docker/editor + API-key detection) ending in `Verdict: READY ✅`. | ✅ captured |
 
 Recommended: 1400px wide max, PNG, cropped tight to the relevant UI.

@@ -51,6 +51,7 @@ New to any of this? The appendices are ordered the way a newcomer meets each ski
 | **A — Python & Virtual Environments** | [`APPENDIX_A.md`](./APPENDIX_A.md) — install Python, what a virtual environment is and why every chapter makes one, `venv` / `pip` / `requirements.txt`, running the tools and tests, the full clone-to-run loop, and troubleshooting. |
 | **B — Git & GitHub** | [`APPENDIX_B.md`](./APPENDIX_B.md) — install Git, the six commands you actually need (`init`/`status`/`add`/`commit`/`log`/`clone`), create a GitHub account, push your own work, and authenticate (`gh auth` or a personal access token). |
 | **C — API Keys & Environment Variables** | [`APPENDIX_C.md`](./APPENDIX_C.md) — what an API key and an environment variable are, what `export` does, the `.env` pattern, step-by-step key creation for all five providers (OpenAI, Anthropic, Perplexity, Google AI Studio, Hugging Face), and how to keep keys safe. |
+| **E — Chapter 1 Figure Index** | [`APPENDIX_E.md`](./APPENDIX_E.md) — all nine Chapter 1 screenshots reproduced inline in reading order, each with where it appears and what to look for. Print it or keep it on a second screen to follow the setup without switching to the repo. |
 
 ---
 

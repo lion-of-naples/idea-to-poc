@@ -17,3 +17,4 @@ tooling UI changes.
 | `readiness-report.png` | Step 3.4, after `python3 devbox.py` | Terminal showing the full `AM I READY TO BUILD?` report (Python/git/node/docker/editor + API-key detection) ending in `Verdict: READY ✅`. | ✅ captured |
 
 Recommended: 1400px wide max, PNG, cropped tight to the relevant UI.
+| composer-mode-menu.png | ✅ captured | Expanded Composer mode selector menu (Plan/Debug/Multitask/Ask + Image/Skills/MCP Servers) |

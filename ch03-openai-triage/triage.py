@@ -21,6 +21,12 @@ Usage:
     python3 triage.py inbox.txt --model gpt-4.1 -o board.md
     echo "card reader is down at register 3" | python3 triage.py -
 
+    # Live source example (Chapter 9 idea, wired here): triage a Slack channel
+    # instead of a file. Needs SLACK_BOT_TOKEN with the channels:history scope.
+    export SLACK_BOT_TOKEN="xoxb-..."
+    python3 triage.py C0123456789 --source slack
+    python3 triage.py C0123456789 --source slack --limit 100 -o board.md
+
 The core logic (payload build, response parse, Markdown render, sorting) is
 pure and unit-tested, so the project's tests run in CI with no API key and no
 network. Only `call_openai` touches the wire.
@@ -265,9 +271,36 @@ def _read_input(path: str) -> str:
         return fh.read()
 
 
+def read_items_from_source(
+    source: str,
+    ref: str,
+    *,
+    sep: str | None = None,
+    slack_limit: int = 50,
+) -> list[str]:
+    """Resolve any input source down to the item list `triage` expects.
+
+    Delegates to `sources.read_source`, which returns the same raw text whether
+    it came from a file, stdin, or a live Slack channel; `split_items` then does
+    the same job it always did. The source is imported lazily so the module and
+    its offline tests never need the source adapter or a Slack token loaded.
+    """
+    from sources import read_source  # lazy: keeps triage import light + offline
+
+    text = read_source(source, ref, slack_limit=slack_limit)
+    return split_items(text, sep=sep)
+
+
 def _parse_args(argv: list[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Raw items -> Markdown triage board.")
-    p.add_argument("input", help="path to an items file, or '-' to read stdin")
+    p.add_argument("input",
+                   help="items file path (or '-' for stdin); with "
+                        "--source slack, a channel ID like C0123456789")
+    p.add_argument("--source", default="file", choices=["file", "slack"],
+                   help="where items come from (default: file). 'slack' reads "
+                        "a channel via SLACK_BOT_TOKEN — see README.")
+    p.add_argument("--limit", type=int, default=50,
+                   help="max Slack messages to pull (only with --source slack)")
     p.add_argument("--sep", default=None,
                    help="split items on this delimiter instead of by line")
     p.add_argument("--model", default=DEFAULT_MODEL,
@@ -280,8 +313,9 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv if argv is not None else sys.argv[1:])
     try:
-        text = _read_input(args.input)
-        items = split_items(text, sep=args.sep)
+        items = read_items_from_source(
+            args.source, args.input, sep=args.sep, slack_limit=args.limit,
+        )
         md = triage(items, model=args.model)
     except Exception as exc:  # noqa: BLE001 - surface a clean CLI error
         print(f"error: {exc}", file=sys.stderr)

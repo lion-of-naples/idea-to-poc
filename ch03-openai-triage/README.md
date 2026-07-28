@@ -56,7 +56,9 @@ echo "card reader is down at register 3" | python3 triage.py -
 
 | Flag | Default | What it does |
 |------|---------|--------------|
-| `input` | — | path to an items file, or `-` for stdin |
+| `input` | — | path to an items file, or `-` for stdin (with `--source slack`, a channel ID like `C0123456789`) |
+| `--source` | `file` | where items come from: `file` or `slack` (see "Going live" below) |
+| `--limit` | `50` | max Slack messages to pull (only with `--source slack`) |
 | `--sep` | (by line) | split items on this delimiter instead of by line |
 | `--model` | `gpt-4.1-mini` | any OpenAI model that supports structured outputs |
 | `-o, --out` | stdout | write the board to this file |
@@ -72,6 +74,45 @@ echo "card reader is down at register 3" | python3 triage.py -
    `parse_response`, `sort_rows`, `build_markdown`) is pure and tested; only
    `call_openai` touches the wire. That's why `pytest` runs with no key.
 4. **End with a commit.** Small, green, shippable.
+
+## Going live: connecting real sources
+
+The tool never cares *where* the items came from — it just needs a `list[str]`.
+That's the whole reason a file and a live service are interchangeable: swap the
+source, and the pure triage core (schema, prompt, parse, sort, render) doesn't
+move. `sources.py` is that seam.
+
+**Slack is included as a worked example.** Point the tool at a channel and it
+triages the recent messages instead of a file:
+
+```bash
+# A Slack bot token with the channels:history scope (and the bot in the channel)
+export SLACK_BOT_TOKEN="xoxb-..."
+export OPENAI_API_KEY="sk-..."
+
+python3 triage.py C0123456789 --source slack
+python3 triage.py C0123456789 --source slack --limit 100 -o board.md
+```
+
+Under the hood, `sources.py` splits into the same three pieces every chapter
+uses:
+
+- `format_slack_messages` — **pure**: turns raw Slack message dicts into triage
+  items (drops joins/leaves and bot posts, collapses each message to one line).
+  Unit-tested offline against fixtures.
+- `fetch_slack_messages` — the **one impure edge**: the only function that
+  touches the network. It uses the Python standard library (`urllib`), so
+  there's **no new dependency**, and the tests never call it.
+- `read_source` — the **injectable seam**: pass a fake `fetcher` and the whole
+  selection path runs with no token and no wire. That's how `test_sources.py`
+  covers the Slack path offline.
+
+**Adding another source is the same move.** Want a real inbox (IMAP/Gmail), a
+help desk (Zendesk/Freshdesk), or GitHub issues? Write one function that returns
+the messages, format them into a `list[str]`, and register a new `--source`
+value in `read_source`. Nothing in `triage.py`'s core changes. Keep the file
+source as the default so the offline test suite still runs with no network and
+no keys — that's what keeps the project honest and CI-friendly.
 
 ## Make it yours
 
@@ -97,9 +138,11 @@ and deterministic in CI.
 | File | Purpose |
 |------|---------|
 | `triage.py` | the CLI + pure core |
-| `test_triage.py` | offline unit tests |
+| `sources.py` | input sources — local file + Slack example (pure format / impure fetch / injectable seam) |
+| `test_triage.py` | offline unit tests for the core |
+| `test_sources.py` | offline unit tests for the source adapters (Slack path via a fake fetcher) |
 | `sample_inbox.txt` | a 7-item example to try |
-| `requirements.txt` | `openai` (runtime) + `pytest` (tests) |
+| `requirements.txt` | `openai` (runtime) + `pytest` (tests) — the Slack source adds **no** new dependency |
 | `.gitignore` | keeps `.env` / keys / generated boards out of git |
 
 ---

@@ -7,7 +7,7 @@
 #   3. pip install huggingface_hub    (gives you the `hf` / `huggingface-cli` command)
 #
 # Usage:
-#   export HF_TOKEN="hf_..."                 # your write token
+#   export HF_TOKEN="hf_..."                 # your write token -- DEPLOY ONLY
 #   ./push_to_space.sh <your-username> <space-name>
 #
 # Example:
@@ -15,6 +15,14 @@
 #
 # After it finishes, your app is live at:
 #   https://huggingface.co/spaces/<your-username>/<space-name>
+#
+# IMPORTANT -- use two different tokens:
+#   This script needs WRITE, because it creates the Space and uploads files.
+#   The running app does NOT: it only calls Inference Providers. Do not paste
+#   this write token into the Space secret. A public Space holding a write token
+#   is a public page holding a credential that can push to all of your repos.
+#   For the Space secret, create a FINE-GRAINED token with inference permission
+#   only. See: https://huggingface.co/docs/hub/en/security-tokens
 set -euo pipefail
 
 USERNAME="${1:-}"
@@ -58,3 +66,8 @@ PY
 echo ""
 echo ">>> Done. Your Space is building now — it will be live shortly at:"
 echo "    https://huggingface.co/spaces/${REPO_ID}"
+echo ""
+echo ">>> One more step: Settings → Variables and secrets → add a secret HF_TOKEN"
+echo "    so the app can call Inference Providers."
+echo "    Use a FINE-GRAINED, inference-only token there -- NOT the write token"
+echo "    you just deployed with. https://huggingface.co/docs/hub/en/security-tokens"

@@ -38,6 +38,8 @@ python3 research_agent.py "retrieval-augmented generation best practices" \
     -o rag_summary.md
 ```
 
+> **On Windows, run these from Git Bash**, not PowerShell. Git Bash installs with [Git for Windows](https://git-scm.com/download/win) and runs every `bash` block in this repo exactly as printed; PowerShell is a different language and rejects `&&` and `source` with *"not a valid statement separator in this version."* Activate the venv with `source .venv/Scripts/activate` on Windows — the script lives in `Scripts`, not `bin`. Details and PowerShell equivalents: [Appendix A.7](../APPENDIX_A.md#a7-windows-which-shell-to-use).
+
 ### Options
 
 | Flag | What it does |

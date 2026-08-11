@@ -36,7 +36,7 @@ git --version
 If you see something like `git version 2.43.0`, you are done — skip to B.3. If you get "command not found," install it:
 
 - **macOS** — the simplest path is to run `git --version` once; macOS offers to install the Xcode Command Line Tools, which include Git. Or, if you use [Homebrew](https://brew.sh), run `brew install git`.
-- **Windows** — download and run the installer from [git-scm.com/download/win](https://git-scm.com/download/win). Accept the defaults; this also gives you the **Git Bash** terminal, which behaves like the macOS/Linux examples in this book.
+- **Windows** — download and run the installer from [git-scm.com/download/win](https://git-scm.com/download/win). Accept the defaults. This also installs the **Git Bash** terminal — which matters more than it sounds like it should, because Git Bash is what lets every `bash` block in this repo run on Windows exactly as printed. PowerShell cannot run them: it is a different language and rejects `&&`, `source`, and `command -v` outright. Once Git for Windows is installed, open **Git Bash** from the Start menu and use it for the rest of the book. [Appendix A.7](./APPENDIX_A.md#a7-windows-which-shell-to-use) explains the choice and lists PowerShell equivalents if you want them.
 - **Linux** — `sudo apt install git` (Debian/Ubuntu) or `sudo dnf install git` (Fedora).
 
 Run `git --version` again to confirm.

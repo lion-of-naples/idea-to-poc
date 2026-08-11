@@ -27,7 +27,7 @@ app to a public Space in one command.
 ## Requirements
 
 - **Python 3.10+**
-- A free Hugging Face account + a token (`HF_TOKEN`) — only needed to run *live*; the tests run offline. Get one at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens).
+- A free Hugging Face account + a token (`HF_TOKEN`) — only needed to run *live*; the tests run offline. Get one at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens). For local runs a **read** or inference-only fine-grained token is enough — you only need a **write** token to deploy. See [Two tokens, not one](#two-tokens-not-one).
 - `pip install -r requirements.txt`
 
 ## Quickstart
@@ -37,7 +37,7 @@ cd ch05-huggingface-space
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-export HF_TOKEN="hf_..."   # from https://huggingface.co/settings/tokens
+export HF_TOKEN="hf_..."   # read / inference-only is enough here
 
 # Classify one piece of text against your own labels:
 python3 app.py "I want to return this phone I bought last week" \
@@ -67,7 +67,7 @@ This is the payoff of the chapter. Two ways:
 ### Option A — one command (scripted)
 
 ```bash
-export HF_TOKEN="hf_..."                        # a *write* token
+export HF_TOKEN="hf_..."                        # a *write* token — deploy only
 ./push_to_space.sh <your-username> zero-shot-classifier
 ```
 
@@ -78,15 +78,41 @@ That creates a Gradio Space (if it doesn't exist), uploads `app.py` +
 https://huggingface.co/spaces/<your-username>/zero-shot-classifier
 ```
 
-Add your token as a Space secret named `HF_TOKEN` under **Settings → Variables
-and secrets** so the deployed app can call Inference Providers.
+Then add a Space secret named `HF_TOKEN` under **Settings → Variables and
+secrets** so the deployed app can call Inference Providers — but **not** the write
+token you just deployed with. See [Two tokens, not one](#two-tokens-not-one).
 
 ### Option B — by hand (the manual recipe)
 
 1. Create a new Space at [huggingface.co/new-space](https://huggingface.co/new-space), choose the **Gradio** SDK.
 2. Add two files: this `app.py` and `requirements.txt`.
-3. In **Settings → Variables and secrets**, add a secret `HF_TOKEN` with a write token.
+3. In **Settings → Variables and secrets**, add a secret `HF_TOKEN` — a **fine-grained, inference-only** token, not a write token.
 4. Push. Hugging Face builds the Space and serves it at the URL above.
+
+### Two tokens, not one
+
+The deploy step needs a **write** token, because it creates the Space and uploads
+files. The running app does not — it only calls Inference Providers.
+
+If you paste the same write token into the Space secret, your public web page is
+holding a credential that can push to every repository you own. One bug that
+echoes the environment back to a visitor is all it takes for that to become
+somebody else's token.
+
+Make two:
+
+| Token | Scope | Where it lives |
+|---|---|---|
+| Deploy token | `write` | your terminal, for `push_to_space.sh` — never in the Space |
+| App token | fine-grained, inference only | the Space secret named `HF_TOKEN` |
+
+Hugging Face recommends exactly this — [fine-grained tokens for production, one
+token per application](https://huggingface.co/docs/hub/en/security-tokens). A
+public Space is production, even when it's a weekend project.
+
+If a token leaks, revoke it immediately from the **Access Tokens** tab, or
+`POST https://huggingface.co/api/credentials/revoke` — which works even on a
+token you don't own, so you can use it on one you spot in someone's public repo.
 
 > **Why a Space "just works":** a Gradio Space looks for an `app.py` that ends by
 > launching a Gradio app. Our `app.py --serve` does exactly that, and the Space

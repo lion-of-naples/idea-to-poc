@@ -147,6 +147,10 @@ The friendliest of the five: it has a genuinely free tier, so you can run Chapte
 export GEMINI_API_KEY="..."
 ```
 
+> **Make the key today, and make it a fresh one.** Google is retiring its original key format. Keys come in two kinds: **standard** keys, which only tag a request with a project for billing and quota, and **auth** keys, which are bound to a service account and can be shut off automatically when Google's systems spot them leaked. Every key created in AI Studio today is an auth key, so the three steps above already get you the right kind. The dates matter only if you are reaching for an older key: unrestricted standard keys are **already rejected**, unrestricted keys left dormant have been blocked since **May 7, 2026**, and from **September 2026** the Gemini API stops accepting standard keys at all. If Chapter 6 fails to authenticate with a key that used to work, check the **Key Type** column on the API Keys page — if it says *Standard*, click **Create API key**, update your `.env`, confirm the new key works, and only then delete the old one. See [Using Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key).
+
+Every Gemini key belongs to a Google Cloud project, and that project is where spending lives. Google's guidance is to set up **billing alerts** in the Cloud Console so you hear about a usage spike rather than finding it on an invoice. The free tier means Chapter 6 costs nothing, but a key attached to a billed project is a key that can spend. Note also that the free tier is an *Unpaid Service* in Google's terms, and Google's terms say not to submit sensitive, confidential, or personal information to it — [ch06's README](./ch06-gemini-multimodal/README.md#what-you-send-and-who-reads-it) covers what that means when the thing you are uploading is an image.
+
 ### Hugging Face — `HF_TOKEN` (Chapter 5)
 
 Hugging Face calls its key an **access token**, and the *type* matters for this book.
@@ -165,7 +169,8 @@ export HF_TOKEN="hf_..."      # must be a WRITE token for ch05
 
 - **Never commit a key.** Put `.env` in `.gitignore` before your first commit (Appendix B.3). Never paste a key directly into a `.py` file.
 - **Never paste a key into a chat, screenshot, issue, or Slack message.** If it lands anywhere others can read it, consider it burned.
-- **Set a spend limit** wherever the provider allows one (OpenAI, Anthropic). It caps the damage from a runaway loop or a leaked key.
+- **Set a spend limit** wherever the provider allows one (OpenAI, Anthropic). It caps the damage from a runaway loop or a leaked key. Google has no hard cap on a Cloud project, so set a **billing alert** in the Cloud Console instead and treat it as your early warning.
+- **Take a restriction if the provider offers one.** Google now refuses unrestricted keys of its older type outright, and its newer auth keys are scoped to the Gemini API by default. A key that only works for one API is worth much less to whoever finds it.
 - **One key per purpose,** named clearly ("book-ch03", "laptop") so you can revoke a single one without breaking everything else.
 - **Prefer the least privilege that works** — e.g. a Hugging Face *read* token for pulling models, and a *write* token only where you actually deploy.
 
@@ -205,7 +210,7 @@ echo ${OPENAI_API_KEY:0:7}
 | OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) | `OPENAI_API_KEY` | Pay-as-you-go; set a limit |
 | Anthropic | [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys) | `ANTHROPIC_API_KEY` | Prepaid credits |
 | Perplexity | [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api) | `PERPLEXITY_API_KEY` | Credits, separate from Pro |
-| Google AI | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) | `GEMINI_API_KEY` | Free tier available |
+| Google AI | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) | `GEMINI_API_KEY` | Free tier available; make a new-style key |
 | Hugging Face | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) | `HF_TOKEN` | Free; use a **Write** token for ch05 |
 
 ---

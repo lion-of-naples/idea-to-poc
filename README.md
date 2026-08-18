@@ -66,6 +66,8 @@ cd idea-to-poc/ch01-devbox
 python3 devbox.py          # ch01 needs no dependencies; just run it
 ```
 
+> **On Windows, run these from Git Bash**, not PowerShell. Git Bash installs with [Git for Windows](https://git-scm.com/download/win) and runs every `bash` block in this repo exactly as printed; PowerShell is a different language and rejects `&&` and `source` with *"not a valid statement separator in this version."* Activate the venv with `source .venv/Scripts/activate` on Windows — the script lives in `Scripts`, not `bin`. Details and PowerShell equivalents: [Appendix A.7](./APPENDIX_A.md#a7-windows-which-shell-to-use).
+
 Each chapter has its own README with setup, run, and test steps. Chapters 2+ use a virtual environment and a `requirements.txt`.
 
 ---

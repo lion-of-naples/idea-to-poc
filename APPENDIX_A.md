@@ -164,11 +164,11 @@ Nothing was broken. The commands were correct. They were being typed into the wr
 
 ### The one decision
 
-Every block in this book marked `bash` is written in **bash** — the shell used by macOS and Linux. Windows ships **PowerShell**, which is a genuinely good shell, but it is a *different language*. It does not understand `&&`, `||`, `source`, `command -v`, or `chmod`. Those appear in almost every chapter, so translating them line by line would mean translating most of the book.
+Every block in this repo marked `bash` is written in **bash** — the shell used by macOS and Linux. Windows ships **PowerShell**, which is a genuinely good shell, but it is a *different language*. It does not understand `&&`, `||`, `source`, `command -v`, or `chmod`. Those appear in almost every chapter, so translating them line by line would mean translating almost everything.
 
 Don't translate. Open a shell that speaks bash:
 
-**Use Git Bash for every `bash` block in this book.** It installs with **Git for Windows**, which you set up in [Appendix B](./APPENDIX_B.md) anyway, so there is nothing extra to download. Open it from the Start menu ("Git Bash"), or from inside Cursor: open a terminal tab, then pick **Git Bash** from the shell dropdown on that tab. Every command then runs exactly as printed.
+**Use Git Bash for every `bash` block.** It installs with [Git for Windows](https://git-scm.com/download/win), which you set up in [Appendix B](./APPENDIX_B.md) anyway, so there is nothing extra to download. Open it from the Start menu ("Git Bash"), or from inside Cursor: open a terminal tab, then pick **Git Bash** from the shell dropdown on that tab. Every command then runs exactly as printed.
 
 Make it the default in Cursor if you like — **Ctrl-Shift-P**, then **Terminal: Select Default Profile**, then **Git Bash**. Do that once and you can stop thinking about it.
 
@@ -181,7 +181,7 @@ python -m venv .venv
 source .venv/Scripts/activate      # Windows, in Git Bash
 ```
 
-That is the only difference you will hit repeatedly. Note `python`, not `python3` — see A.1.
+That is the only difference you will hit repeatedly. Note `python`, not `python3` — see the note in A.1.
 
 ### Checking which PowerShell you have
 
@@ -208,7 +208,7 @@ If you are staying in PowerShell, these are the translations you need. Each one 
 - `chmod +x` → not needed; Windows has no execute bit
 - `ls`, `cat`, `pwd`, `cd` → already work, as built-in aliases
 
-> **What about WSL?** The Windows Subsystem for Linux gives you a real Linux environment, and everything in this book works there. It is a good destination and a poor starting point — it adds an install, a second filesystem, and a new set of ways to get confused about which machine your files are on. Git Bash gets you through the book today. Come back to WSL when you want it for its own sake.
+> **What about WSL?** The Windows Subsystem for Linux gives you a real Linux environment, and everything here works there. It is a good destination and a poor starting point — it adds an install, a second filesystem, and a new set of ways to get confused about which machine your files are on. Git Bash gets you through the book today. Come back to WSL when you want it for its own sake.
 
 ---
 

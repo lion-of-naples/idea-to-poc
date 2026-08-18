@@ -41,14 +41,7 @@ unbiasedness, the variance inequality, the paper's closed-form formulas, and the
 
 ## Quickstart
 
-> **On Windows, run these commands from Git Bash, not PowerShell.** Git Bash installs
-> with Git for Windows, and every `bash` block in this repo then runs exactly as printed.
-> Where a block creates a virtual environment, activate it with
-> `source .venv/Scripts/activate` instead of `source .venv/bin/activate` — that path is the
-> one real difference. PowerShell does not understand `&&` or `source` and stops with
-> *"not a valid statement separator in this version."*
-> [Appendix A.7](../APPENDIX_A.md#a7-windows-which-shell-to-use) explains the shell choice
-> and lists the PowerShell equivalents.
+> **On Windows, run these from Git Bash**, not PowerShell. Git Bash installs with [Git for Windows](https://git-scm.com/download/win) and runs every `bash` block in this repo exactly as printed; PowerShell is a different language and rejects `&&` and `source` with *"not a valid statement separator in this version."* Activate the venv with `source .venv/Scripts/activate` on Windows — the script lives in `Scripts`, not `bin`. Details and PowerShell equivalents: [Appendix A.7](../APPENDIX_A.md#a7-windows-which-shell-to-use).
 
 ```bash
 cd ch07-blackwell-paper-to-code

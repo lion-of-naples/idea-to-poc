@@ -80,6 +80,10 @@ The macOS/Linux shell command that sets an environment variable for the current 
 
 A version-control program that runs on your computer and records snapshots (commits) of a folder over time. Git is the tool that gives a project a history; it is separate from GitHub, the website that stores copies of repositories.
 
+### Git Bash
+
+A terminal for Windows that speaks **bash**, installed automatically with Git for Windows. It is the shell to use for every block labeled `bash` in this repo: Windows **PowerShell** is a different language and does not understand `&&`, `||`, `source`, or `command -v`, so bash commands typed there fail with a parser error. See [Appendix A.7](./APPENDIX_A.md#a7-windows-which-shell-to-use).
+
 ### GitHub
 
 A website that stores copies of Git repositories in the cloud so other people and machines can get them, and that can run automated tests (CI) on your code. Git is the tool; GitHub is one popular place to keep repos and share them.
@@ -131,6 +135,10 @@ Python's package installer. Once a virtual environment is active, `pip install <
 ### POC (proof of concept)
 
 A **proof of concept** — the smallest real, working version of an idea that proves it can run. This whole book is about crossing the *last mile* from idea to a shipped POC: running, tested, and committed.
+
+### PowerShell
+
+Microsoft's command-line **shell**, preinstalled on Windows. It is capable but it is *not* bash, and the two are not interchangeable: bash syntax typed into PowerShell fails with a parser error. Two versions are in circulation — **Windows PowerShell 5.1**, which ships with Windows, and **PowerShell 7**, a separate install that added the `&&` and `||` operators. Appendix A.7 lists the equivalents; the shorter answer for this book is to use **Git Bash**.
 
 ### pull
 

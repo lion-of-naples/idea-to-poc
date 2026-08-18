@@ -27,10 +27,19 @@ the model call, so every code path is exercised for free.
 ## Requirements
 
 - **Python 3.10+**
-- A free Google AI Studio key (`GEMINI_API_KEY`) — only needed to run *live*; the tests run offline. Get one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
+- A free Google AI Studio key (`GEMINI_API_KEY`) — only needed to run *live*; the tests run offline. Get one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey). Read [What you send, and who reads it](#what-you-send-and-who-reads-it) before you point it at anything real.
 - `pip install -r requirements.txt`
 
 ## Quickstart
+
+> **On Windows, run these commands from Git Bash, not PowerShell.** Git Bash installs
+> with Git for Windows, and every `bash` block in this repo then runs exactly as printed.
+> Where a block creates a virtual environment, activate it with
+> `source .venv/Scripts/activate` instead of `source .venv/bin/activate` — that path is the
+> one real difference. PowerShell does not understand `&&` or `source` and stops with
+> *"not a valid statement separator in this version."*
+> [Appendix A.7](../APPENDIX_A.md#a7-windows-which-shell-to-use) explains the shell choice
+> and lists the PowerShell equivalents.
 
 ```bash
 cd ch06-gemini-multimodal
@@ -60,6 +69,52 @@ python3 vision.py --serve
 | `--json` | off | print the result as JSON instead of a formatted report |
 
 Supported image types: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.bmp`.
+
+## What you send, and who reads it
+
+This is the first chapter where the thing you upload might be a document. A receipt has an
+account number on it. A whiteboard has someone's roadmap on it. A screenshot has whatever
+was on your screen. So before you run this on a real pile of images, know where they go.
+
+A free AI Studio key is an **Unpaid Service** in Google's terms, and unpaid means your
+input is training data: Google "uses content submitted to the Services and generated
+responses to provide, improve, and develop Google products and services and machine
+learning technologies," human reviewers "may read, annotate, and process API input and
+output," and the terms name images and documents among the content this covers. They also
+say it outright: **"Do not submit sensitive, confidential, or personal information to the
+Unpaid Services."** See [Gemini API Additional Terms of Service](https://ai.google.dev/gemini-api/terms).
+
+A key attached to a Cloud project with active billing is a **Paid Service**, and there
+Google "does not use prompts or responses to improve our products." Same code, same model,
+same `vision.py` — the difference is which key you exported.
+
+| What you're analyzing | Free key | Billed project |
+|---|---|---|
+| `sample_scene.png`, your own snapshots, stock photos | fine | fine |
+| Receipts, invoices, IDs, medical or financial paperwork | **no** | appropriate |
+| A client's whiteboard, an internal roadmap, an unreleased design | **no** | appropriate |
+
+If you are in the **EEA, Switzerland, or the UK**, the paid data terms apply to all use
+including the free tier, and Google's terms state that only Paid Services may be used when
+making an API client available to users in those regions.
+
+None of this affects the tests. They never touch the network and never send an image
+anywhere — that is the point of the scripted fake caller.
+
+### Key hygiene
+
+- **Keep the key in the environment, never in the file.** `vision.py` reads `GEMINI_API_KEY`
+  from the environment and nothing else; `.env` and `*.key` are already git-ignored. Google's
+  guidance is the same — treat the key like a password and never check it into source control.
+- **Restrict it.** New keys from AI Studio are scoped to the Gemini API by default. A key that
+  only works for one API is worth much less to whoever finds it.
+- **Set a billing alert.** Google has no hard spend cap on a Cloud project, so an alert in the
+  Cloud Console is your early warning instead.
+- **Make a fresh key rather than reusing an old one.** Google is retiring its original key
+  format: unrestricted standard keys are already rejected, and from **September 2026** the
+  Gemini API stops accepting standard keys entirely. If a key that used to work starts failing
+  to authenticate, check the **Key Type** column on the API Keys page — see
+  [Using Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key).
 
 ## How it's built (the 4-step loop)
 

@@ -21,6 +21,15 @@ two jobs:
 
 ## Run the tests (offline)
 
+> **On Windows, run these commands from Git Bash, not PowerShell.** Git Bash installs
+> with Git for Windows, and every `bash` block in this repo then runs exactly as printed.
+> Where a block creates a virtual environment, activate it with
+> `source .venv/Scripts/activate` instead of `source .venv/bin/activate` — that path is the
+> one real difference. PowerShell does not understand `&&` or `source` and stops with
+> *"not a valid statement separator in this version."*
+> [Appendix A.7](../APPENDIX_A.md#a7-windows-which-shell-to-use) explains the shell choice
+> and lists the PowerShell equivalents.
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt

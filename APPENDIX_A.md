@@ -152,19 +152,80 @@ Do this once per chapter. When you move to the next chapter, `cd` into its folde
 
 ---
 
-## A.7 The five ways you will get stuck, and the fixes
+## A.7 Windows: which shell to use
+
+This section exists because of one error message, reported by more than one reader:
+
+```text
+The token '||' is not a valid statement separator in this version.
+```
+
+Nothing was broken. The commands were correct. They were being typed into the wrong kind of shell.
+
+### The one decision
+
+Every block in this book marked `bash` is written in **bash** — the shell used by macOS and Linux. Windows ships **PowerShell**, which is a genuinely good shell, but it is a *different language*. It does not understand `&&`, `||`, `source`, `command -v`, or `chmod`. Those appear in almost every chapter, so translating them line by line would mean translating most of the book.
+
+Don't translate. Open a shell that speaks bash:
+
+**Use Git Bash for every `bash` block in this book.** It installs with **Git for Windows**, which you set up in [Appendix B](./APPENDIX_B.md) anyway, so there is nothing extra to download. Open it from the Start menu ("Git Bash"), or from inside Cursor: open a terminal tab, then pick **Git Bash** from the shell dropdown on that tab. Every command then runs exactly as printed.
+
+Make it the default in Cursor if you like — **Ctrl-Shift-P**, then **Terminal: Select Default Profile**, then **Git Bash**. Do that once and you can stop thinking about it.
+
+### The one command that still differs
+
+Activating a virtual environment. Windows puts the activate script in `Scripts`, not `bin`:
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate      # Windows, in Git Bash
+```
+
+That is the only difference you will hit repeatedly. Note `python`, not `python3` — see A.1.
+
+### Checking which PowerShell you have
+
+If you decide to use PowerShell anyway, find out which one you are in first, because the answer changes what works:
+
+```powershell
+$PSVersionTable.PSVersion
+```
+
+A **5.1** answer means **Windows PowerShell** — the version preinstalled on Windows. A **7.x** answer means **PowerShell 7**, a separate install. This matters more than it looks. The `&&` and `||` operators [arrived in PowerShell 7](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipeline_chain_operators), and the `?.` and `??` operators [became mainstream in 7.1](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_operators). An AI assistant that suggests any of them has quietly assumed you are on 7.
+
+### PowerShell equivalents
+
+If you are staying in PowerShell, these are the translations you need. Each one works in 5.1 as well as 7:
+
+- `A && B` — run `B` only if `A` succeeded → `A; if ($?) { B }`
+- `A || B` — run `B` only if `A` failed → `A; if (-not $?) { B }`
+- `command -v code` — is this tool on my PATH? → `Get-Command code -ErrorAction SilentlyContinue`
+- `source .venv/bin/activate` → `.venv\Scripts\Activate.ps1`
+- `export OPENAI_API_KEY="sk-..."` → `$env:OPENAI_API_KEY="sk-..."` (see [Appendix C](./APPENDIX_C.md))
+- `mkdir -p a/b` → `New-Item -ItemType Directory -Force -Path a/b`
+- `rm -rf .venv` → `Remove-Item -Recurse -Force .venv`
+- `python3` → `python`
+- `chmod +x` → not needed; Windows has no execute bit
+- `ls`, `cat`, `pwd`, `cd` → already work, as built-in aliases
+
+> **What about WSL?** The Windows Subsystem for Linux gives you a real Linux environment, and everything in this book works there. It is a good destination and a poor starting point — it adds an install, a second filesystem, and a new set of ways to get confused about which machine your files are on. Git Bash gets you through the book today. Come back to WSL when you want it for its own sake.
+
+---
+
+## A.8 The common ways you will get stuck, and the fixes
 
 - **"command not found: python3"** — Python is not installed, or (on Windows) not on your PATH. See A.2; on Windows, re-run the installer and check "Add python.exe to PATH."
 - **"No module named X" even though you installed it** — you are not in an activated venv, or you are in the wrong one. Look for `(.venv)` in your prompt; if it is missing, run `source .venv/bin/activate` (A.3). This is the number-one beginner issue.
 - **"externally-managed-environment" error from `pip`** — you are trying to `pip install` into the *system* Python, which modern Linux/macOS protect. The fix is the whole point of this appendix: make and activate a venv first, then `pip install` inside it.
 - **`pytest: command not found`** — pytest is not installed in the active venv. `pip install -r requirements.txt` (or `pip install pytest`) with the venv active.
-- **PowerShell won't run the activate script** ("running scripts is disabled") — run once, as needed: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, then activate again. Or use Git Bash (Appendix B) and the `source` syntax.
+- **"The token '&&' is not a valid statement separator in this version"** — you are typing bash into PowerShell. Use **Git Bash** instead; see A.7 for the full explanation and the PowerShell equivalents.
+- **PowerShell won't run the activate script** ("running scripts is disabled") — run once, as needed: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, then activate again. Or use Git Bash ([Appendix B](./APPENDIX_B.md)) and the `source` syntax.
 
 A venv is disposable. If one gets into a weird state, the fastest fix is often to delete and rebuild it: `deactivate`, `rm -rf .venv`, then repeat the four lines from A.6. You lose nothing — your code is untouched; only the installed packages are rebuilt.
 
 ---
 
-## A.8 What you can safely ignore (for now)
+## A.9 What you can safely ignore (for now)
 
 The Python packaging world has many tools — `conda`, `poetry`, `pipenv`, `uv`, `pyenv`, and more. They are genuinely useful at scale, and worth exploring once you are building larger systems. But you do **not** need any of them for this book. The built-in `venv` plus `pip` plus a `requirements.txt` — the four lines at the top of this appendix — carry you through all ten chapters. Learn the fancier tools when a real need appears, not before.
 

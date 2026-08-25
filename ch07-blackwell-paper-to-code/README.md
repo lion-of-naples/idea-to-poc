@@ -4,9 +4,10 @@
 
 Chapter 7 of *Idea to POC*. Every earlier chapter wrapped an *API*. This one is
 different: the source is a **research paper** — my own survey
-*Blackwell's Algorithms Powering Modern AI* — and the deliverable is a runnable,
-self-verifying implementation of one result from it: the **Rao-Blackwell
-theorem** (Blackwell, 1947).
+[*The Theorems of Dr. David Blackwell and Their Contributions to Artificial
+Intelligence*](https://arxiv.org/abs/2604.06621) (arXiv:2604.06621) — and the
+deliverable is a runnable, self-verifying implementation of one result from it:
+the **Rao-Blackwell theorem** (Blackwell, 1947).
 
 In plain terms, the theorem says: take any unbiased estimator `S` of a
 parameter, condition it on a **sufficient statistic** `T`, and the new estimator
@@ -147,7 +148,8 @@ imports `gradio`.
 
 *Source material: implements the Rao-Blackwell theorem (Section 3.1, including
 the coin worked example) from my survey
-[*Blackwell's Algorithms Powering Modern AI*](https://github.com/lion-of-naples/Blackwell_AI_Survey_2026),
+[*The Theorems of Dr. David Blackwell and Their Contributions to Artificial Intelligence*](https://arxiv.org/abs/2604.06621),
+arXiv:2604.06621,
 which traces C. R. Rao (1945) and David Blackwell (1947) to modern applications
 including Rao-Blackwellized Particle Filters (RBPF-SLAM) and policy-gradient
 variance reduction in RLHF. The theorem and its law-of-total-variance proof are

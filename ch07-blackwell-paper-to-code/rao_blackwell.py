@@ -2,9 +2,10 @@
 """rao_blackwell — turn a theorem from a research paper into running, verifiable code.
 
 Chapter 7 of *Idea to POC*. Every earlier chapter wrapped an *API*. This one is
-different: the "source" is a research paper — my own survey,
-*Blackwell's Algorithms Powering Modern AI* — and the job is to take one result
-off the page and make it a thing that runs and that you can check.
+different: the "source" is a research paper — my own survey, *The Theorems of
+Dr. David Blackwell and Their Contributions to Artificial Intelligence*
+(arXiv:2604.06621) — and the job is to take one result off the page and make it
+a thing that runs and that you can check.
 
 We implement the **Rao-Blackwell theorem** (Blackwell, 1947). In plain terms:
 take any unbiased estimator `S` of a parameter, condition it on a *sufficient

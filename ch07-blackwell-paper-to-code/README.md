@@ -3,7 +3,7 @@
 **Take a theorem off the page and make it a thing that runs — and that you can check.**
 
 Chapter 7 of *Idea to POC*. Every earlier chapter wrapped an *API*. This one is
-different: the source is a **research paper** — the author's survey
+different: the source is a **research paper** — my own survey
 *Blackwell's Algorithms Powering Modern AI* — and the deliverable is a runnable,
 self-verifying implementation of one result from it: the **Rao-Blackwell
 theorem** (Blackwell, 1947).
@@ -149,7 +149,7 @@ imports `gradio`.
 ---
 
 *Source material: implements the Rao-Blackwell theorem (Section 3.1, including
-the coin worked example) from the author's survey
+the coin worked example) from my survey
 [*Blackwell's Algorithms Powering Modern AI*](https://github.com/lion-of-naples/Blackwell_AI_Survey_2026),
 which traces C. R. Rao (1945) and David Blackwell (1947) to modern applications
 including Rao-Blackwellized Particle Filters (RBPF-SLAM) and policy-gradient

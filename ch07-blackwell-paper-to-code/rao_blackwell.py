@@ -2,7 +2,7 @@
 """rao_blackwell — turn a theorem from a research paper into running, verifiable code.
 
 Chapter 7 of *Idea to POC*. Every earlier chapter wrapped an *API*. This one is
-different: the "source" is a research paper — the author's own survey,
+different: the "source" is a research paper — my own survey,
 *Blackwell's Algorithms Powering Modern AI* — and the job is to take one result
 off the page and make it a thing that runs and that you can check.
 

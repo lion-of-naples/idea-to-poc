@@ -65,12 +65,9 @@ Example output:
 Rao-Blackwell experiment  [coin]
   theta = 0.300   n = 10   trials = 50,000
 
-  Estimator          empirical mean     empirical variance
-  S  (naive, X_1)        0.2974            0.208945
-  S* (Rao-Black.)        0.3008            0.020961
-
-  Theory   Var(S)  = theta(1-theta)   = 0.210000
-  Theory   Var(S*) = theta(1-theta)/n = 0.021000
+  Estimator             mean  variance    theory  closed form
+  S  (naive, X_1)     0.2974  0.208945  0.210000  theta(1-theta)
+  S* (Rao-Blackwell)  0.3008  0.020961  0.021000  theta(1-theta)/n
 
   Variance removed by Rao-Blackwellization: 90.0%
   Theorem  Var(S*) <= Var(S):  HOLDS

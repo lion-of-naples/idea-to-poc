@@ -148,6 +148,34 @@ def summarize(samples: Any, theta: float, *, label: str = "coin",
     )
 
 
+# Report column widths. The empirical and theory variances sit in adjacent
+# columns on purpose: comparing them is the whole point of the report, and
+# the reader should not have to look in two places to do it. Widths are fixed
+# so every number right-aligns under its own header, and the widest line stays
+# under 68 characters so the block fits a printed page without reflowing.
+_COL_LABEL = 18
+_COL_MEAN = 6
+_COL_VAR = 8
+_COL_THEORY = 8
+_GUTTER = "  "
+
+
+def _report_row(label: str, mean: str, var: str, theory: str, formula: str) -> str:
+    """Lay out one report row so numbers right-align under their headers."""
+    return (
+        "  "
+        + label.ljust(_COL_LABEL)
+        + _GUTTER
+        + mean.rjust(_COL_MEAN)
+        + _GUTTER
+        + var.rjust(_COL_VAR)
+        + _GUTTER
+        + theory.rjust(_COL_THEORY)
+        + _GUTTER
+        + formula
+    )
+
+
 def format_result(result: RBResult) -> str:
     """Render an `RBResult` as a compact, human-readable report."""
     pct = result.variance_reduction * 100.0
@@ -156,12 +184,21 @@ def format_result(result: RBResult) -> str:
         f"Rao-Blackwell experiment  [{result.label}]",
         f"  theta = {result.theta:.3f}   n = {result.n}   trials = {result.trials:,}",
         "",
-        "  Estimator          empirical mean     empirical variance",
-        f"  S  (naive, X_1)    {result.naive_mean:>10.4f}        {result.naive_var:>12.6f}",
-        f"  S* (Rao-Black.)    {result.rb_mean:>10.4f}        {result.rb_var:>12.6f}",
-        "",
-        f"  Theory   Var(S)  = theta(1-theta)   = {result.theory_naive_var:.6f}",
-        f"  Theory   Var(S*) = theta(1-theta)/n = {result.theory_rb_var:.6f}",
+        _report_row("Estimator", "mean", "variance", "theory", "closed form"),
+        _report_row(
+            "S  (naive, X_1)",
+            f"{result.naive_mean:.4f}",
+            f"{result.naive_var:.6f}",
+            f"{result.theory_naive_var:.6f}",
+            "theta(1-theta)",
+        ),
+        _report_row(
+            "S* (Rao-Blackwell)",
+            f"{result.rb_mean:.4f}",
+            f"{result.rb_var:.6f}",
+            f"{result.theory_rb_var:.6f}",
+            "theta(1-theta)/n",
+        ),
         "",
         f"  Variance removed by Rao-Blackwellization: {pct:.1f}%",
         f"  Theorem  Var(S*) <= Var(S):  {verdict}",

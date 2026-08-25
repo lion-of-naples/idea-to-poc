@@ -152,6 +152,8 @@ the coin worked example) from my survey
 arXiv:2604.06621,
 which traces C. R. Rao (1945) and David Blackwell (1947) to modern applications
 including Rao-Blackwellized Particle Filters (RBPF-SLAM) and policy-gradient
-variance reduction in RLHF. The theorem and its law-of-total-variance proof are
+variance reduction in reinforcement learning, and to an emerging frontier:
+explicit Rao-Blackwellization in LLM RLHF. The theorem and its
+law-of-total-variance proof are
 standard results in mathematical statistics. Part of the
 [Idea to POC](../README.md) book project.*

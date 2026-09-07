@@ -164,8 +164,46 @@ def test_render_portfolio_readme_sections_and_run_cmd():
     assert "## Run it locally" in md
     assert "## How it's hosted" in md
     assert "pip install -r requirements.txt" in md
-    assert "python app.py" in md
+    assert "python3 app.py" in md
     assert "`app.py` (12 bytes)" in md
+
+
+def test_space_requirements_carry_the_poc_dependencies():
+    """The Space must install what the POC needs, or it dies on first real use."""
+    m = pp.build_manifest(
+        "Delta",
+        [("app.py", 12), ("requirements.txt", 30)],
+        requirements_text="anthropic>=0.40\nhttpx\n",
+    )
+    reqs = pp.render_space_requirements(m)
+    assert "anthropic>=0.40" in reqs
+    assert "httpx" in reqs
+
+
+def test_space_requirements_do_not_pin_gradio():
+    """gradio comes from the Space SDK; pinning it here causes build conflicts."""
+    m = pp.build_manifest("Delta", [("app.py", 1)], requirements_text="httpx\n")
+    body = [
+        line for line in pp.render_space_requirements(m).splitlines()
+        if line.strip() and not line.startswith("#")
+    ]
+    assert body == ["httpx"]
+
+
+def test_space_requirements_when_poc_has_none():
+    m = pp.build_manifest("Delta", [("app.py", 1)])
+    reqs = pp.render_space_requirements(m)
+    assert "no requirements.txt" in reqs
+    assert [l for l in reqs.splitlines() if not l.startswith("#")] == []
+
+
+def test_space_requirements_drop_blank_lines():
+    m = pp.build_manifest("Delta", [("app.py", 1)], requirements_text="a\n\n\nb\n")
+    body = [
+        line for line in pp.render_space_requirements(m).splitlines()
+        if not line.startswith("#")
+    ]
+    assert body == ["a", "b"]
 
 
 def test_render_portfolio_readme_uses_polished_summary():
@@ -189,6 +227,7 @@ def test_build_plan_covers_all_three_targets():
     assert "cloudflare/public/index.html" in relpaths
     assert "huggingface/README.md" in relpaths
     assert "huggingface/app.py" in relpaths
+    assert "huggingface/requirements.txt" in relpaths
     assert "PORTFOLIO_README.md" in relpaths
 
 
@@ -247,6 +286,22 @@ def test_read_poc_scans_and_ignores(tmp_path):
     assert m.name == "ScanMe"
 
 
+def test_read_poc_carries_requirements_across(tmp_path):
+    """The impure edge must read the dependency list, not just note that it exists."""
+    poc = tmp_path / "poc"
+    poc.mkdir()
+    (poc / "app.py").write_text("print('hi')\n")
+    (poc / "requirements.txt").write_text("anthropic>=0.40\nhttpx\n")
+    m = pp.read_poc(str(poc))
+    assert m.has_requirements is True
+    assert "anthropic>=0.40" in m.requirements_text
+    reqs = next(
+        f.content for f in pp.build_plan(m, "out").files
+        if f.relpath == "huggingface/requirements.txt"
+    )
+    assert "anthropic>=0.40" in reqs and "httpx" in reqs
+
+
 def test_read_poc_missing_dir_raises():
     with pytest.raises(FileNotFoundError):
         pp.read_poc("/no/such/poc/dir")
@@ -256,12 +311,13 @@ def test_write_plan_creates_all_files(tmp_path):
     m = pp.build_manifest("Golf", [("app.py", 1)], summary="golf")
     plan = pp.build_plan(m, str(tmp_path / "out"))
     written = pp.write_plan(plan)
-    assert len(written) == 5
+    assert len(written) == 6
     out = tmp_path / "out"
     assert (out / "cloudflare" / "wrangler.toml").exists()
     assert (out / "cloudflare" / "public" / "index.html").exists()
     assert (out / "huggingface" / "README.md").exists()
     assert (out / "huggingface" / "app.py").exists()
+    assert (out / "huggingface" / "requirements.txt").exists()
     assert (out / "PORTFOLIO_README.md").exists()
 
 
@@ -296,7 +352,7 @@ def test_cli_help_runs():
 def test_cli_missing_dir_errors():
     r = _cli("/no/such/dir")
     assert r.returncode == 2
-    assert "error:" in r.stderr
+    assert "Error:" in r.stderr
 
 
 def test_cli_dry_run(tmp_path):

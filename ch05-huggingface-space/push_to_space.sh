@@ -42,7 +42,7 @@ REPO_ID="${USERNAME}/${SPACE_NAME}"
 echo ">>> Creating (or reusing) Gradio Space: ${REPO_ID}"
 
 # Create the Space repo if it doesn't already exist (Gradio SDK).
-python - "$REPO_ID" <<'PY'
+python3 - "$REPO_ID" <<'PY'
 import sys, os
 from huggingface_hub import create_repo
 repo_id = sys.argv[1]
@@ -52,7 +52,7 @@ print(f"    ok: {repo_id}")
 PY
 
 echo ">>> Uploading app.py + requirements.txt"
-python - "$REPO_ID" <<'PY'
+python3 - "$REPO_ID" <<'PY'
 import sys, os
 from huggingface_hub import HfApi
 repo_id = sys.argv[1]

@@ -17,7 +17,7 @@
 #   export HF_TOKEN="hf_..."
 #   ./deploy_huggingface.sh <out-dir> <your-username> <space-name>
 #
-# Example (after: python package_poc.py sample_poc --out ship_out):
+# Example (after: python3 package_poc.py sample_poc --out ship_out):
 #   ./deploy_huggingface.sh ship_out napoleon my-first-poc
 #
 # When it finishes, your Space builds and goes live at:
@@ -36,7 +36,7 @@ fi
 HF_DIR="${OUT_DIR%/}/huggingface"
 if [[ ! -d "$HF_DIR" ]]; then
   echo "Not found: ${HF_DIR}" >&2
-  echo "Run the packager first, e.g.:  python package_poc.py sample_poc --out ${OUT_DIR}" >&2
+  echo "Run the packager first, e.g.:  python3 package_poc.py sample_poc --out ${OUT_DIR}" >&2
   exit 1
 fi
 
@@ -47,7 +47,7 @@ fi
 
 REPO_ID="${USERNAME}/${SPACE_NAME}"
 echo ">>> Creating (or reusing) Gradio Space: ${REPO_ID}"
-python - "$REPO_ID" <<'PY'
+python3 - "$REPO_ID" <<'PY'
 import sys, os
 from huggingface_hub import create_repo
 repo_id = sys.argv[1]
@@ -56,13 +56,13 @@ create_repo(repo_id, repo_type="space", space_sdk="gradio",
 print(f"    ok: {repo_id}")
 PY
 
-echo ">>> Uploading app.py + README.md"
-python - "$REPO_ID" "$HF_DIR" <<'PY'
+echo ">>> Uploading app.py + README.md + requirements.txt"
+python3 - "$REPO_ID" "$HF_DIR" <<'PY'
 import sys, os
 from huggingface_hub import HfApi
 repo_id, hf_dir = sys.argv[1], sys.argv[2]
 api = HfApi(token=os.environ["HF_TOKEN"])
-for fname in ("app.py", "README.md"):
+for fname in ("app.py", "README.md", "requirements.txt"):
     api.upload_file(path_or_fileobj=os.path.join(hf_dir, fname),
                     path_in_repo=fname, repo_id=repo_id, repo_type="space")
     print(f"    uploaded: {fname}")

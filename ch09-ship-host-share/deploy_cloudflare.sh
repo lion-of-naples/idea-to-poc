@@ -15,7 +15,7 @@
 # Usage:
 #   ./deploy_cloudflare.sh <out-dir> <project-name>
 #
-# Example (after: python package_poc.py sample_poc --out ship_out):
+# Example (after: python3 package_poc.py sample_poc --out ship_out):
 #   ./deploy_cloudflare.sh ship_out my-first-poc
 #
 # When it finishes, wrangler prints the live *.pages.dev URL.
@@ -32,7 +32,7 @@ fi
 PUBLIC_DIR="${OUT_DIR%/}/cloudflare/public"
 if [[ ! -d "$PUBLIC_DIR" ]]; then
   echo "Not found: ${PUBLIC_DIR}" >&2
-  echo "Run the packager first, e.g.:  python package_poc.py sample_poc --out ${OUT_DIR}" >&2
+  echo "Run the packager first, e.g.:  python3 package_poc.py sample_poc --out ${OUT_DIR}" >&2
   exit 1
 fi
 

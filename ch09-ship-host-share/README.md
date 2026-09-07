@@ -14,7 +14,7 @@ how to run it, and where it's hosted.
 | File | What it is |
 | --- | --- |
 | `package_poc.py` | The packager: pure core + isolated disk edges + injectable polish seam + CLI |
-| `test_package_poc.py` | 31 offline tests (no key, no network, no third-party SDK) |
+| `test_package_poc.py` | 36 offline tests (no key, no network, no third-party SDK) |
 | `deploy_cloudflare.sh` | Documented live deploy: `wrangler pages deploy` |
 | `deploy_huggingface.sh` | Documented live deploy: create Space + upload files |
 | `sample_poc/` | A tiny sample POC (reverse a string) to package |
@@ -25,7 +25,7 @@ how to run it, and where it's hosted.
 > **On Windows, run these from Git Bash**, not PowerShell. Git Bash installs with [Git for Windows](https://git-scm.com/download/win) and runs every `bash` block in this repo exactly as printed; PowerShell is a different language and rejects `&&` and `source` with *"not a valid statement separator in this version."* Activate the venv with `source .venv/Scripts/activate` on Windows — the script lives in `Scripts`, not `bin`. Details and PowerShell equivalents: [Appendix A.7](../APPENDIX_A.md#a7-windows-which-shell-to-use).
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 pytest -q
 ```
@@ -37,7 +37,7 @@ by the tests.
 ## Package a POC
 
 ```bash
-python package_poc.py sample_poc --summary "Reverses a string." --out ship_out
+python3 package_poc.py sample_poc --summary "Reverses a string." --out ship_out
 ```
 
 That writes:
@@ -48,21 +48,22 @@ ship_out/
   cloudflare/public/index.html
   huggingface/README.md
   huggingface/app.py
+  huggingface/requirements.txt
   PORTFOLIO_README.md
 ```
 
 Preview without writing anything:
 
 ```bash
-python package_poc.py sample_poc --dry-run
-python package_poc.py sample_poc --trace --dry-run   # manifest JSON to stderr
+python3 package_poc.py sample_poc --dry-run
+python3 package_poc.py sample_poc --trace --dry-run   # manifest JSON to stderr
 ```
 
 ## Optional: polish the README with a model (live)
 
 ```bash
 export ANTHROPIC_API_KEY="sk-ant-..."
-python package_poc.py sample_poc --summary "Reverses a string." --polish
+python3 package_poc.py sample_poc --summary "Reverses a string." --polish
 ```
 
 Without a key, `--polish` exits cleanly with a message — it never crashes and the
